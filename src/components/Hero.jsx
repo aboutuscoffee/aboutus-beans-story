@@ -9,7 +9,7 @@ export default function Hero({ bean, farm, country, heroImage }) {
       />
       <div
         className="absolute inset-0"
-        style={{ background: 'linear-gradient(180deg, rgba(26,24,26,0.15) 0%, rgba(26,24,26,0.55) 68%, rgba(26,24,26,0.88) 100%)' }}
+        style={{ background: 'linear-gradient(180deg, rgba(26,24,26,0) 0%, rgba(26,24,26,0) 42%, rgba(26,24,26,0.78) 100%)' }}
       />
 
       <div className="relative h-full flex flex-col items-center justify-end text-center px-6 pb-20">
