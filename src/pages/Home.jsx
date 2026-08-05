@@ -34,8 +34,8 @@ export default function Home() {
             NOW RELEASING — いま飲める{beans.length}銘柄
           </p>
           <div className="flex gap-4 overflow-x-auto px-6 pb-2" style={{ scrollbarWidth: 'none' }}>
-            {beans.map(({ bean, country }) => (
-              <BeanCard key={bean.id} bean={bean} country={country} />
+            {beans.map(({ bean, country }, i) => (
+              <BeanCard key={bean.id} bean={bean} country={country} index={i} />
             ))}
           </div>
         </div>

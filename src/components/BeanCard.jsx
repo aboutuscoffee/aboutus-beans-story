@@ -14,22 +14,32 @@ function placeholderFor(id) {
   return PLACEHOLDER_GRADIENTS[idx];
 }
 
-export default function BeanCard({ bean, country }) {
+export default function BeanCard({ bean, country, index = 0 }) {
   const image = heroImageFor(bean);
 
   return (
     <Link
       to={`/beans/${bean.id}`}
-      className="flex-shrink-0 block overflow-hidden rounded-lg"
-      style={{ width: '168px' }}
+      className="group reveal flex-shrink-0 block"
+      style={{ width: '168px', animationDelay: `${Math.min(index, 8) * 0.06}s` }}
     >
       <div
-        className="w-full"
-        style={{
-          aspectRatio: '3 / 4',
-          background: image ? `url(${image}) center/cover` : placeholderFor(bean.id),
-        }}
-      />
+        className="w-full overflow-hidden rounded-lg relative"
+        style={{ aspectRatio: '3 / 4', boxShadow: '0 6px 20px rgba(26,24,26,0.10)' }}
+      >
+        <div
+          className="w-full h-full transition-transform duration-700 ease-out group-hover:scale-110"
+          style={{ background: image ? `url(${image}) center/cover` : placeholderFor(bean.id) }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{ background: 'linear-gradient(180deg, rgba(26,24,26,0) 55%, rgba(26,24,26,0.32) 100%)' }}
+        />
+        <div
+          className="absolute inset-0 pointer-events-none transition-opacity duration-500 opacity-0 group-hover:opacity-100"
+          style={{ background: 'rgba(26,24,26,0.08)' }}
+        />
+      </div>
       <div className="pt-3">
         <p className="text-[10px] tracking-[0.1em]" style={{ color: '#9a9080' }}>
           {country?.flag} {country?.name}

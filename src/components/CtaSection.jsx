@@ -1,7 +1,7 @@
 import { pairingFor } from '../lib/curatedPairings';
 
-// TODO: オンラインショップの実URLが決まり次第、PURCHASE_URL を差し替える
-const PURCHASE_URL = '#';
+// TODO: 銘柄ごとの商品ページURLが分かれば、bean単位でリンクさせる
+const PURCHASE_URL = 'https://aboutuscoffee.stores.jp/';
 
 export default function CtaSection({ bean }) {
   const pairing = pairingFor(bean);
@@ -15,6 +15,8 @@ export default function CtaSection({ bean }) {
 
         <a
           href={PURCHASE_URL}
+          target="_blank"
+          rel="noreferrer"
           className="inline-block px-10 py-4 text-[12px] tracking-[0.2em] mb-4"
           style={{ background: '#F8F6F2', color: '#1A181A' }}
         >
