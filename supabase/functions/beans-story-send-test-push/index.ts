@@ -41,8 +41,15 @@ Deno.serve(async (req) => {
     )
   );
 
+  const succeeded = results.filter((r) => r.status === "fulfilled").length;
+  const details = results.map((r) =>
+    r.status === "fulfilled"
+      ? { ok: true }
+      : { ok: false, error: String(r.reason?.body || r.reason?.message || r.reason) }
+  );
+
   return new Response(
-    JSON.stringify({ sent: results.length, results: results.map((r) => r.status) }),
+    JSON.stringify({ attempted: results.length, succeeded, details }),
     { headers: { ...corsHeaders, "Content-Type": "application/json" } }
   );
 });

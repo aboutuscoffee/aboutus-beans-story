@@ -25,7 +25,11 @@ function PushTestPanel() {
     setStatus('送信中…');
     try {
       const result = await sendTestNotification();
-      setStatus(`送信しました（${result?.sent ?? 0}件）`);
+      const failDetail = result?.details?.find((d) => !d.ok);
+      setStatus(
+        `${result?.succeeded ?? 0} / ${result?.attempted ?? 0} 件成功` +
+          (failDetail ? `（失敗理由: ${failDetail.error}）` : '')
+      );
     } catch (e) {
       setStatus('');
       setError(e.message);
