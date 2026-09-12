@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { flowText, extractFlavorTags } from '../lib/text';
+import { tasteFor } from '../lib/curatedTaste';
 import RadarChart from './RadarChart';
 
 function SpecRow({ label, value }) {
@@ -44,7 +45,7 @@ export default function ProfileSection({ bean, farm, process }) {
 
       {bean.taste_ja && (
         <p className="text-[14px] leading-[1.95] mb-10 mt-8" style={{ color: '#4a4038' }}>
-          {flowText(bean.taste_ja)}
+          {tasteFor(bean)}
         </p>
       )}
 
