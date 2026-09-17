@@ -8,6 +8,8 @@ import OriginSection from '../components/OriginSection';
 import Gallery from '../components/Gallery';
 import ProfileSection from '../components/ProfileSection';
 import CtaSection from '../components/CtaSection';
+import Reveal from '../components/Reveal';
+import StickyBuyBar from '../components/StickyBuyBar';
 
 export default function BeanPage() {
   const { id } = useParams();
@@ -39,11 +41,12 @@ export default function BeanPage() {
         ← 世界地図へ
       </Link>
       <Hero bean={bean} farm={farm} country={country} heroImage={heroImageFor(bean)} />
-      <StorySection farm={farm} />
-      <OriginSection bean={bean} farm={farm} country={country} />
-      <Gallery images={galleryImagesFor(bean)} />
-      <ProfileSection bean={bean} farm={farm} process={process} />
-      <CtaSection bean={bean} />
+      <Reveal><StorySection farm={farm} /></Reveal>
+      <Reveal><OriginSection bean={bean} farm={farm} country={country} /></Reveal>
+      <Reveal><Gallery images={galleryImagesFor(bean)} /></Reveal>
+      <Reveal><ProfileSection bean={bean} farm={farm} process={process} /></Reveal>
+      <Reveal><CtaSection bean={bean} /></Reveal>
+      <StickyBuyBar bean={bean} />
     </div>
   );
 }

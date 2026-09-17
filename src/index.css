@@ -62,3 +62,22 @@ select {
 .reveal {
   animation: fade-up 0.9s ease-out both;
 }
+
+.reveal-io {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.reveal-io.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-io {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}

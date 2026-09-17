@@ -1,7 +1,5 @@
 import { pairingFor } from '../lib/curatedPairings';
-
-// TODO: 銘柄ごとの商品ページURLが分かれば、bean単位でリンクさせる
-const PURCHASE_URL = 'https://aboutuscoffee.stores.jp/';
+import { PURCHASE_URL } from '../lib/constants';
 
 export default function CtaSection({ bean }) {
   const pairing = pairingFor(bean);
