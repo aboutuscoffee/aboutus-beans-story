@@ -5,7 +5,6 @@ import { heroImageFor, galleryImagesFor } from '../lib/curatedImages';
 import Hero from '../components/Hero';
 import StorySection from '../components/StorySection';
 import OriginSection from '../components/OriginSection';
-import Gallery from '../components/Gallery';
 import ProfileSection from '../components/ProfileSection';
 import CtaSection from '../components/CtaSection';
 import Reveal from '../components/Reveal';
@@ -41,9 +40,8 @@ export default function BeanPage() {
         ← 世界地図へ
       </Link>
       <Hero bean={bean} farm={farm} country={country} heroImage={heroImageFor(bean)} />
-      <Reveal><StorySection farm={farm} /></Reveal>
+      <Reveal><StorySection farm={farm} images={galleryImagesFor(bean)} /></Reveal>
       <Reveal><OriginSection bean={bean} farm={farm} country={country} /></Reveal>
-      <Reveal><Gallery images={galleryImagesFor(bean)} /></Reveal>
       <Reveal><ProfileSection bean={bean} farm={farm} process={process} /></Reveal>
       <Reveal><CtaSection bean={bean} /></Reveal>
       <StickyBuyBar bean={bean} />

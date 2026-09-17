@@ -1,7 +1,7 @@
-import { useState } from 'react';
 import { flowText, extractFlavorTags } from '../lib/text';
 import { tasteFor } from '../lib/curatedTaste';
 import RadarChart from './RadarChart';
+import Accordion from './Accordion';
 
 function SpecRow({ label, value }) {
   if (!value) return null;
@@ -14,7 +14,6 @@ function SpecRow({ label, value }) {
 }
 
 export default function ProfileSection({ bean, farm, process }) {
-  const [open, setOpen] = useState(false);
   const tags = extractFlavorTags(bean.taste_ja);
 
   return (
@@ -49,26 +48,18 @@ export default function ProfileSection({ bean, farm, process }) {
         </p>
       )}
 
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        className="w-full flex items-center justify-between py-4 cursor-pointer"
-        style={{ borderTop: '0.5px solid #D0C8BE', borderBottom: open ? 'none' : '0.5px solid #D0C8BE' }}
-      >
-        <span className="text-[11px] tracking-[0.2em]" style={{ color: '#5a4838' }}>詳細プロファイル</span>
-        <span className="text-[11px]" style={{ color: '#9a9080' }}>{open ? '閉じる ▲' : 'もっと見る ▼'}</span>
-      </button>
-
-      {open && (
-        <div className="pt-1 pb-2">
+      <div style={{ borderBottom: '0.5px solid #D0C8BE' }}>
+        <Accordion title="産地情報">
           <SpecRow label="産地" value={farm?.country_name} />
           <SpecRow label="地域・農園" value={farm?.location ?? farm?.name} />
           <SpecRow label="生産者" value={bean.producer} />
-          <SpecRow label="品種" value={flowText(bean.variety)} />
           <SpecRow label="標高" value={bean.altitude} />
+        </Accordion>
+        <Accordion title="品種・精製方法">
+          <SpecRow label="品種" value={flowText(bean.variety)} />
           <SpecRow label="精製方法" value={process?.name} />
-        </div>
-      )}
+        </Accordion>
+      </div>
     </section>
   );
 }

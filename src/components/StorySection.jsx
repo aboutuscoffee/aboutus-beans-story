@@ -1,15 +1,27 @@
 import { flowText } from '../lib/text';
 
-export default function StorySection({ farm }) {
+export default function StorySection({ farm, images = [] }) {
+  const photos = images.slice(0, 2);
+
   return (
     <section id="story" className="max-w-2xl mx-auto px-6 pt-24 pb-16">
       <p className="text-[10px] tracking-[0.28em] mb-4" style={{ color: '#9a9080' }}>THE FARM — 農園のストーリー</p>
       <h2 className="font-serif-jp text-2xl mb-8" style={{ color: '#1A181A' }}>{farm?.name}</h2>
 
       {farm?.overview && (
-        <p className="text-[15px] leading-[2] mb-12" style={{ color: '#4a4038' }}>
+        <p className="text-[15px] leading-[2] mb-10" style={{ color: '#4a4038' }}>
           {flowText(farm.overview)}
         </p>
+      )}
+
+      {photos.length > 0 && (
+        <div className={`grid gap-3 mb-12 ${photos.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+          {photos.map((url) => (
+            <div key={url} className="overflow-hidden rounded-lg" style={{ aspectRatio: photos.length > 1 ? '4 / 3' : '16 / 9' }}>
+              <img src={url} alt="" className="w-full h-full object-cover" />
+            </div>
+          ))}
+        </div>
       )}
 
       {farm?.areas?.length > 0 && (
