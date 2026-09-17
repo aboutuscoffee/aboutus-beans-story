@@ -5,14 +5,6 @@ function parseChips(raw) {
   try { return JSON.parse(raw); } catch { return []; }
 }
 
-// プロトタイプ用: 産地の主要都市（ルート表現の起点）。将来的にはcountriesテーブルへ追加を検討
-const COUNTRY_CAPITAL = {
-  kenya: 'NAIROBI',
-  ethiopia: 'ADDIS ABABA',
-  colombia: 'BOGOTÁ',
-  panama: 'PANAMA CITY',
-};
-
 export default function OriginSection({ bean, farm, country }) {
   const chips = parseChips(country?.flavor_chips);
 
@@ -20,9 +12,8 @@ export default function OriginSection({ bean, farm, country }) {
     <section className="max-w-2xl mx-auto px-6 pb-16">
       <p className="text-[10px] tracking-[0.28em] mb-4" style={{ color: '#9a9080' }}>ORIGIN — 産地への旅</p>
       <RouteMap
-        fromLabel={COUNTRY_CAPITAL[country?.slug] ?? country?.name?.toUpperCase()}
-        toLabel={farm?.name}
-        toSubLabel={farm?.location}
+        countrySlug={country?.slug}
+        farm={farm}
         caption={`${(farm?.location ?? country?.region ?? '').toUpperCase()}, ${country?.name?.toUpperCase() ?? ''}`}
         altitude={bean.altitude}
       />

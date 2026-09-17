@@ -8,21 +8,23 @@ export default function StorySection({ farm, images = [] }) {
       <p className="text-[10px] tracking-[0.28em] mb-4" style={{ color: '#9a9080' }}>THE FARM — 農園のストーリー</p>
       <h2 className="font-serif-jp text-2xl mb-8" style={{ color: '#1A181A' }}>{farm?.name}</h2>
 
-      {farm?.overview && (
-        <p className="text-[15px] leading-[2] mb-10" style={{ color: '#4a4038' }}>
-          {flowText(farm.overview)}
-        </p>
-      )}
+      <div className={photos.length > 0 ? 'flex flex-col md:flex-row gap-8 mb-12' : ''}>
+        {photos.length > 0 && (
+          <div className="flex flex-row md:flex-col gap-3 flex-shrink-0" style={{ width: '100%', maxWidth: '260px' }}>
+            {photos.map((url) => (
+              <div key={url} className="flex-1 md:flex-none rounded-lg overflow-hidden" style={{ background: '#F0EDE7' }}>
+                <img src={url} alt="" className="w-full h-auto block" style={{ objectFit: 'contain' }} />
+              </div>
+            ))}
+          </div>
+        )}
 
-      {photos.length > 0 && (
-        <div className={`grid gap-3 mb-12 ${photos.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
-          {photos.map((url) => (
-            <div key={url} className="overflow-hidden rounded-lg" style={{ aspectRatio: photos.length > 1 ? '4 / 3' : '16 / 9' }}>
-              <img src={url} alt="" className="w-full h-full object-cover" />
-            </div>
-          ))}
-        </div>
-      )}
+        {farm?.overview && (
+          <p className="text-[15px] leading-[2]" style={{ color: '#4a4038', margin: 0 }}>
+            {flowText(farm.overview)}
+          </p>
+        )}
+      </div>
 
       {farm?.areas?.length > 0 && (
         <div className="space-y-8">

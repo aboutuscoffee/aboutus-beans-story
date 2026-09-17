@@ -20,6 +20,41 @@ function ringToPath(ring, project) {
     .join(' ') + ' Z';
 }
 
+function outerRings(geometry) {
+  if (geometry.type === 'Polygon') return [geometry.coordinates[0]];
+  if (geometry.type === 'MultiPolygon') return geometry.coordinates.map((poly) => poly[0]);
+  return [];
+}
+
+// 単一の国の輪郭をviewBoxいっぱいに収める投影を作る。
+// 離島（例: エクアドルのガラパゴス）が全体の縮尺を歪めないよう、最も点数の多い輪郭（=本土）だけを基準にbboxを取る
+export function fitProjection(geometry, width, height, padding = 24) {
+  const rings = outerRings(geometry);
+  const mainland = rings.reduce((a, b) => (b.length > a.length ? b : a), rings[0] ?? []);
+
+  let lngMin = Infinity, lngMax = -Infinity, latMin = Infinity, latMax = -Infinity;
+  for (const [lng, lat] of mainland) {
+    if (lng < lngMin) lngMin = lng;
+    if (lng > lngMax) lngMax = lng;
+    if (lat < latMin) latMin = lat;
+    if (lat > latMax) latMax = lat;
+  }
+
+  const lngSpan = Math.max(lngMax - lngMin, 0.01);
+  const latSpan = Math.max(latMax - latMin, 0.01);
+  const scale = Math.min((width - padding * 2) / lngSpan, (height - padding * 2) / latSpan);
+
+  const lngCenter = (lngMin + lngMax) / 2;
+  const latCenter = (latMin + latMax) / 2;
+  const xCenter = width / 2;
+  const yCenter = height / 2;
+
+  return (lng, lat) => ({
+    x: xCenter + (lng - lngCenter) * scale,
+    y: yCenter - (lat - latCenter) * scale,
+  });
+}
+
 export function geometryToPath(geometry, project) {
   if (!geometry) return '';
   if (geometry.type === 'Polygon') {

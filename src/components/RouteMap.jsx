@@ -1,12 +1,37 @@
-// 農園への「旅」を抽象的なルート表現で見せる演出用マップ。
-// 精密な地理データではなく、起点（主要都市）→農園のダッシュラインで没入感を出す。
-export default function RouteMap({ fromLabel, toLabel, toSubLabel, caption, altitude }) {
+import { useEffect, useState } from 'react';
+import { fetchWorldLand, fitProjection, geometryToPath } from '../lib/worldGeo';
+import { COUNTRY_GEO } from '../lib/countryGeo';
+
+const WIDTH = 500;
+const HEIGHT = 600;
+
+// 農園への「旅」を、その国の実際の国境シルエット上に首都→農園のルートで見せる演出用マップ
+export default function RouteMap({ countrySlug, farm, caption, altitude }) {
+  const [geo, setGeo] = useState(null);
+
+  const info = COUNTRY_GEO[countrySlug];
+
+  useEffect(() => {
+    if (!info) return;
+    fetchWorldLand().then((land) => {
+      const feat = land.features.find((f) => f.properties?.name === info.atlasName);
+      if (feat) setGeo(feat.geometry);
+    });
+  }, [info]);
+
+  if (!info || !farm?.lat || !farm?.lng) return null;
+
+  const project = geo ? fitProjection(geo, WIDTH, HEIGHT) : null;
+  const countryPath = geo && project ? geometryToPath(geo, project) : '';
+  const capital = project ? project(info.capitalLng, info.capitalLat) : null;
+  const target = project ? project(farm.lng, farm.lat) : null;
+
   return (
     <div
       className="relative overflow-hidden rounded-lg"
       style={{ background: '#1A181A', aspectRatio: '4 / 5', maxHeight: '520px' }}
     >
-      <svg viewBox="0 0 500 600" className="w-full h-full" preserveAspectRatio="xMidYMid slice">
+      <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="w-full h-full" preserveAspectRatio="xMidYMid meet">
         <defs>
           <radialGradient id="glow" cx="50%" cy="50%" r="50%">
             <stop offset="0%" stopColor="#E8C99A" stopOpacity="0.9" />
@@ -14,33 +39,37 @@ export default function RouteMap({ fromLabel, toLabel, toSubLabel, caption, alti
           </radialGradient>
         </defs>
 
-        {/* 抽象的な陸地シルエット */}
-        <path
-          d="M 90 560 C 40 460, 60 340, 130 260 C 180 200, 170 130, 240 90 C 320 45, 400 70, 430 150
-             C 460 230, 400 260, 400 340 C 400 430, 340 480, 280 560 C 220 610, 140 610, 90 560 Z"
-          fill="#28241f"
-        />
+        {countryPath && <path d={countryPath} fill="#28241f" />}
 
-        {/* ルート */}
-        <path
-          d="M 150 490 Q 220 420 250 340 T 330 150"
-          fill="none"
-          stroke="#E8C99A"
-          strokeWidth="1.5"
-          strokeDasharray="6 6"
-          strokeLinecap="round"
-          className="route-dash"
-        />
+        {capital && target && (
+          <>
+            <path
+              d={`M ${capital.x} ${capital.y} Q ${(capital.x + target.x) / 2 + (target.y - capital.y) * 0.12} ${(capital.y + target.y) / 2 - (target.x - capital.x) * 0.12} ${target.x} ${target.y}`}
+              fill="none"
+              stroke="#E8C99A"
+              strokeWidth="1.5"
+              strokeDasharray="6 6"
+              strokeLinecap="round"
+              className="route-dash"
+            />
 
-        {/* 起点 */}
-        <circle cx="150" cy="490" r="4" fill="#8a8070" />
-        <text x="162" y="495" fill="rgba(248,246,242,0.55)" fontSize="13" letterSpacing="1">{fromLabel}</text>
+            <circle cx={capital.x} cy={capital.y} r="4" fill="#8a8070" />
+            <text x={capital.x + 10} y={capital.y + 4} fill="rgba(248,246,242,0.55)" fontSize="13" letterSpacing="1">
+              {info.capital}
+            </text>
 
-        {/* 農園（強調） */}
-        <circle cx="330" cy="150" r="16" fill="url(#glow)" />
-        <circle cx="330" cy="150" r="4.5" fill="#F8F6F2" />
-        <text x="342" y="146" fill="#F8F6F2" fontSize="15" fontWeight="600">{toLabel}</text>
-        {toSubLabel && <text x="342" y="166" fill="rgba(248,246,242,0.6)" fontSize="11">{toSubLabel}</text>}
+            <circle cx={target.x} cy={target.y} r="16" fill="url(#glow)" />
+            <circle cx={target.x} cy={target.y} r="4.5" fill="#F8F6F2" />
+            <text x={target.x + 12} y={target.y - 6} fill="#F8F6F2" fontSize="15" fontWeight="600">
+              {farm.name}
+            </text>
+            {farm.location && (
+              <text x={target.x + 12} y={target.y + 14} fill="rgba(248,246,242,0.6)" fontSize="11">
+                {farm.location}
+              </text>
+            )}
+          </>
+        )}
       </svg>
 
       <div className="absolute left-5 bottom-5 text-[11px] tracking-[0.14em]" style={{ color: 'rgba(248,246,242,0.55)' }}>
