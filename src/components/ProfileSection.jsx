@@ -1,5 +1,4 @@
 import { flowText, extractFlavorTags } from '../lib/text';
-import { tasteFor } from '../lib/curatedTaste';
 import RadarChart from './RadarChart';
 import Accordion from './Accordion';
 
@@ -18,7 +17,7 @@ export default function ProfileSection({ bean, farm, process }) {
 
   return (
     <section className="max-w-2xl mx-auto px-6 pb-20">
-      <p className="text-[10px] tracking-[0.28em] mb-4" style={{ color: '#9a9080' }}>TASTE — フレーバーノート</p>
+      <p className="text-[10px] tracking-[0.28em] mb-4" style={{ color: '#9a9080' }}>FLAVOR NOTES — フレーバーノート</p>
 
       {tags.length > 0 && (
         <div className="flex flex-wrap gap-2 mb-8">
@@ -40,13 +39,7 @@ export default function ProfileSection({ bean, farm, process }) {
         </div>
       )}
 
-      <RadarChart bean={bean} />
-
-      {bean.taste_ja && (
-        <p className="text-[14px] leading-[1.95] mb-10 mt-8" style={{ color: '#4a4038' }}>
-          {tasteFor(bean)}
-        </p>
-      )}
+      <div className="mb-10"><RadarChart bean={bean} /></div>
 
       <div style={{ borderBottom: '0.5px solid #D0C8BE' }}>
         <Accordion title="産地情報">

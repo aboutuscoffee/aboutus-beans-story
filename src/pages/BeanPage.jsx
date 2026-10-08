@@ -40,7 +40,7 @@ export default function BeanPage() {
         ← 世界地図へ
       </Link>
       <Hero bean={bean} farm={farm} country={country} heroImage={heroImageFor(bean)} />
-      <Reveal><StorySection farm={farm} images={galleryImagesFor(bean)} /></Reveal>
+      <StorySection bean={bean} farm={farm} images={galleryImagesFor(bean)} />
       <Reveal><OriginSection bean={bean} farm={farm} country={country} /></Reveal>
       <Reveal><ProfileSection bean={bean} farm={farm} process={process} /></Reveal>
       <Reveal><CtaSection bean={bean} /></Reveal>
