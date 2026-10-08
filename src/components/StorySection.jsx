@@ -2,6 +2,7 @@ import { flowText, formatAltitude } from '../lib/text';
 import { stripWiki } from '../lib/wikitext';
 import { buildStoryBlocks, termParagraphs } from '../lib/storyBlocks';
 import Reveal from './Reveal';
+import ChartCrop from './ChartCrop';
 
 function Eyebrow({ children }) {
   return <p className="text-[10px] tracking-[0.28em] mb-4" style={{ color: '#9a9080' }}>{children}</p>;
@@ -37,24 +38,6 @@ function SpecList({ bean, farm }) {
         </div>
       ))}
     </dl>
-  );
-}
-
-// シールカード画像のうち、右下のレーダーチャート部分だけを切り出して見せる
-function ChartCrop({ url }) {
-  return (
-    <div
-      role="img"
-      aria-label="フレーバーのレーダーチャート"
-      className="w-full"
-      style={{
-        aspectRatio: '1.157 / 1',
-        backgroundImage: `url(${url})`,
-        backgroundRepeat: 'no-repeat',
-        backgroundSize: '204% auto',
-        backgroundPosition: '70.6% 78.4%',
-      }}
-    />
   );
 }
 

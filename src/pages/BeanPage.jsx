@@ -9,6 +9,8 @@ import OriginSection from '../components/OriginSection';
 import ProfileSection from '../components/ProfileSection';
 import CtaSection from '../components/CtaSection';
 import Reveal from '../components/Reveal';
+import Recommended from '../components/Recommended';
+import SiteFooter from '../components/SiteFooter';
 import StickyBuyBar from '../components/StickyBuyBar';
 
 export default function BeanPage() {
@@ -50,6 +52,8 @@ export default function BeanPage() {
       <Reveal><OriginSection bean={bean} farm={farm} country={country} mapOnRight={lastPhotoOnLeft} /></Reveal>
       <Reveal><ProfileSection bean={bean} farm={farm} process={process} /></Reveal>
       <Reveal><CtaSection bean={bean} /></Reveal>
+      <Recommended bean={bean} country={country} />
+      <SiteFooter />
       <StickyBuyBar bean={bean} />
     </div>
   );

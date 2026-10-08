@@ -18,6 +18,11 @@ export function firstGalleryIsSealCard(bean) {
   return !CURATED_IMAGES[bean.id] && (bean.image_urls?.length ?? 0) > 1;
 }
 
+// 「似た味わい」カード用: シールカード（=チャート入り）がある豆はその画像を返す
+export function chartImageFor(bean) {
+  return firstGalleryIsSealCard(bean) ? bean.image_urls[1] : null;
+}
+
 export function galleryImagesFor(bean) {
   return CURATED_IMAGES[bean.id]?.gallery ?? bean.image_urls?.slice(1) ?? [];
 }
