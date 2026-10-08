@@ -81,3 +81,11 @@ select {
     transition: none;
   }
 }
+
+/* 日本語の本文: 文節の途中で折り返さず、行末に1文字だけ残るのを避ける */
+.tight p,
+.tight h4 {
+  word-break: auto-phrase;
+  line-break: strict;
+  text-wrap: pretty;
+}

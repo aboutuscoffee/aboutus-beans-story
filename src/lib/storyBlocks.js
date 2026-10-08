@@ -17,6 +17,16 @@ function toParagraphs(sentences) {
   return out;
 }
 
+// 用語解説(terms)の本文を段落に整える。「【フレーバーの特性】」のような内部向けの見出し記号は取り除く
+export function termParagraphs(body) {
+  return (body || '')
+    .replace(/\[\[([^|\]]+)\|\w+:[\w-]+\]\]/g, '$1')
+    .replace(/【[^】]*】\n?/g, '')
+    .split(/\n{2,}/)
+    .map((p) => p.replace(/\n/g, '').trim())
+    .filter(Boolean);
+}
+
 export function buildStoryBlocks(bean, farm) {
   const sentences = toSentences(flowText(bean.description_ja || farm?.overview || ''));
 
