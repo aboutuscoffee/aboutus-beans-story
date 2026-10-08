@@ -7,8 +7,9 @@ export async function fetchBeanStory(beanId) {
     .from('beans')
     .select('*')
     .eq('id', beanId)
-    .single();
+    .maybeSingle();
   if (beanError) throw new Error(beanError.message);
+  if (!bean) throw new Error('NOT_FOUND');
 
   const farmSlug = extractSlug(bean.region, 'farm');
   const countrySlug = extractSlug(bean.origin, 'country');

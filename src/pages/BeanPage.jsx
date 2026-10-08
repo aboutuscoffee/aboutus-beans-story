@@ -18,13 +18,42 @@ export default function BeanPage() {
   const [story, setStory] = useState(null);
   const [error, setError] = useState(null);
 
+  const [attempt, setAttempt] = useState(0);
+
   useEffect(() => {
+    let cancelled = false;
     setStory(null);
-    fetchBeanStory(id).then(setStory).catch((e) => setError(e.message));
-  }, [id]);
+    setError(null);
+
+    // 一時的な通信エラーや更新中のタイミングで空振りすることがあるため、1回だけ自動で再試行する
+    const load = (retry) =>
+      fetchBeanStory(id)
+        .then((s) => { if (!cancelled) setStory(s); })
+        .catch((e) => {
+          if (cancelled) return;
+          if (retry && e.message !== 'NOT_FOUND') setTimeout(() => load(false), 900);
+          else setError(e.message);
+        });
+    load(true);
+    return () => { cancelled = true; };
+  }, [id, attempt]);
 
   if (error) {
-    return <div className="min-h-screen flex items-center justify-center text-sm text-stone-500">{error}</div>;
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-5 px-6 text-center text-sm" style={{ color: '#5a5248' }}>
+        <p>{error === 'NOT_FOUND' ? 'この豆のページは見つかりませんでした。' : 'ページを読み込めませんでした。'}</p>
+        <div className="flex gap-3">
+          {error !== 'NOT_FOUND' && (
+            <button type="button" onClick={() => setAttempt((n) => n + 1)} className="px-5 py-2 text-[12px] tracking-[0.1em]" style={{ border: '1px solid #1A181A', color: '#1A181A' }}>
+              もう一度読み込む
+            </button>
+          )}
+          <Link to="/" className="px-5 py-2 text-[12px] tracking-[0.1em]" style={{ border: '1px solid #D0C8BE', color: '#5a5248' }}>
+            世界地図へ戻る
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   if (!story) {
