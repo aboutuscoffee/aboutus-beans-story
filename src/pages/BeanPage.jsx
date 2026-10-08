@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchBeanStory } from '../lib/data';
 import { heroImageFor, galleryImagesFor, firstGalleryIsSealCard } from '../lib/curatedImages';
+import { buildStoryBlocks } from '../lib/storyBlocks';
 import Hero from '../components/Hero';
 import StorySection from '../components/StorySection';
 import OriginSection from '../components/OriginSection';
@@ -30,6 +31,11 @@ export default function BeanPage() {
 
   const { bean, farm, country, process, varietyTerms, processTerm } = story;
 
+  // 写真は 左→右→左… と交互に並ぶ。産地マップは、直前の写真と反対側に置く
+  const galleryImages = galleryImagesFor(bean);
+  const photoCount = Math.min(galleryImages.length, buildStoryBlocks(bean, farm).length);
+  const lastPhotoOnLeft = photoCount > 0 && (photoCount - 1) % 2 === 0;
+
   return (
     <div className="font-sans-jp" style={{ backgroundColor: '#FAFAF8' }}>
       <Link
@@ -40,8 +46,8 @@ export default function BeanPage() {
         ← 世界地図へ
       </Link>
       <Hero bean={bean} farm={farm} country={country} heroImage={heroImageFor(bean)} />
-      <StorySection bean={bean} farm={farm} images={galleryImagesFor(bean)} chartCropFirst={firstGalleryIsSealCard(bean)} varietyTerms={varietyTerms} process={process} processTerm={processTerm} />
-      <Reveal><OriginSection bean={bean} farm={farm} country={country} /></Reveal>
+      <StorySection bean={bean} farm={farm} images={galleryImages} chartCropFirst={firstGalleryIsSealCard(bean)} varietyTerms={varietyTerms} process={process} processTerm={processTerm} />
+      <Reveal><OriginSection bean={bean} farm={farm} country={country} mapOnRight={lastPhotoOnLeft} /></Reveal>
       <Reveal><ProfileSection bean={bean} farm={farm} process={process} /></Reveal>
       <Reveal><CtaSection bean={bean} /></Reveal>
       <StickyBuyBar bean={bean} />

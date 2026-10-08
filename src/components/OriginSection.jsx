@@ -6,13 +6,13 @@ function parseChips(raw) {
   try { return JSON.parse(raw); } catch { return []; }
 }
 
-export default function OriginSection({ bean, farm, country }) {
+export default function OriginSection({ bean, farm, country, mapOnRight = false }) {
   const chips = parseChips(country?.flavor_chips);
 
   return (
     <section className="tight max-w-3xl mx-auto px-6 pb-10">
       <p className="text-[10px] tracking-[0.28em] mb-4" style={{ color: '#9a9080' }}>ORIGIN — 産地への旅</p>
-      <div className="flex flex-col md:flex-row gap-6 md:gap-10 md:items-center">
+      <div className={`flex flex-col ${mapOnRight ? 'md:flex-row-reverse' : 'md:flex-row'} gap-6 md:gap-10 md:items-center`}>
         <div className="w-full max-w-[300px] mx-auto md:mx-0 md:w-[300px] flex-shrink-0">
           <RouteMap
             countrySlug={country?.slug}
