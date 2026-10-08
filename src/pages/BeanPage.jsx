@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { fetchBeanStory } from '../lib/data';
-import { heroImageFor, galleryImagesFor } from '../lib/curatedImages';
+import { heroImageFor, galleryImagesFor, firstGalleryIsSealCard } from '../lib/curatedImages';
 import Hero from '../components/Hero';
 import StorySection from '../components/StorySection';
 import OriginSection from '../components/OriginSection';
@@ -40,7 +40,7 @@ export default function BeanPage() {
         ← 世界地図へ
       </Link>
       <Hero bean={bean} farm={farm} country={country} heroImage={heroImageFor(bean)} />
-      <StorySection bean={bean} farm={farm} images={galleryImagesFor(bean)} varietyTerms={varietyTerms} process={process} processTerm={processTerm} />
+      <StorySection bean={bean} farm={farm} images={galleryImagesFor(bean)} chartCropFirst={firstGalleryIsSealCard(bean)} varietyTerms={varietyTerms} process={process} processTerm={processTerm} />
       <Reveal><OriginSection bean={bean} farm={farm} country={country} /></Reveal>
       <Reveal><ProfileSection bean={bean} farm={farm} process={process} /></Reveal>
       <Reveal><CtaSection bean={bean} /></Reveal>

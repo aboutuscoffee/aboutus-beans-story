@@ -12,6 +12,12 @@ export function heroImageFor(bean) {
   return CURATED_IMAGES[bean.id]?.hero ?? bean.image_urls?.[0] ?? null;
 }
 
+// 現行の全銘柄は image_urls[1] が同一テンプレートのシールカード（右下にレーダーチャート）。
+// ギャラリー先頭がそれになる（=キュレーション指定が無い）ときだけ、チャート部分を切り出して見せる。
+export function firstGalleryIsSealCard(bean) {
+  return !CURATED_IMAGES[bean.id] && (bean.image_urls?.length ?? 0) > 1;
+}
+
 export function galleryImagesFor(bean) {
   return CURATED_IMAGES[bean.id]?.gallery ?? bean.image_urls?.slice(1) ?? [];
 }
