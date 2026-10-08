@@ -28,7 +28,7 @@ export default function BeanPage() {
     return <div className="min-h-screen flex items-center justify-center text-sm text-stone-400">Loading...</div>;
   }
 
-  const { bean, farm, country, process } = story;
+  const { bean, farm, country, process, varietyTerms, processTerm } = story;
 
   return (
     <div className="font-sans-jp" style={{ backgroundColor: '#FAFAF8' }}>
@@ -40,7 +40,7 @@ export default function BeanPage() {
         ← 世界地図へ
       </Link>
       <Hero bean={bean} farm={farm} country={country} heroImage={heroImageFor(bean)} />
-      <StorySection bean={bean} farm={farm} images={galleryImagesFor(bean)} />
+      <StorySection bean={bean} farm={farm} images={galleryImagesFor(bean)} varietyTerms={varietyTerms} process={process} processTerm={processTerm} />
       <Reveal><OriginSection bean={bean} farm={farm} country={country} /></Reveal>
       <Reveal><ProfileSection bean={bean} farm={farm} process={process} /></Reveal>
       <Reveal><CtaSection bean={bean} /></Reveal>

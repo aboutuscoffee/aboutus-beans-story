@@ -9,7 +9,7 @@ export default function OriginSection({ bean, farm, country }) {
   const chips = parseChips(country?.flavor_chips);
 
   return (
-    <section className="max-w-2xl mx-auto px-6 pb-16">
+    <section className="max-w-2xl mx-auto px-6 pb-12">
       <p className="text-[10px] tracking-[0.28em] mb-4" style={{ color: '#9a9080' }}>ORIGIN — 産地への旅</p>
       <RouteMap
         countrySlug={country?.slug}

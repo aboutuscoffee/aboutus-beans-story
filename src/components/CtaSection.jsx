@@ -5,7 +5,7 @@ export default function CtaSection({ bean }) {
   const pairing = pairingFor(bean);
 
   return (
-    <section style={{ backgroundColor: '#1A181A' }} className="text-center px-6 py-20">
+    <section style={{ backgroundColor: '#1A181A' }} className="text-center px-6 py-16">
       <div className="max-w-md mx-auto">
         <p className="font-serif-jp text-lg mb-8 leading-relaxed" style={{ color: '#F8F6F2' }}>
           このコーヒーを、<br />もっと近くで。

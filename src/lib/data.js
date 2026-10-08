@@ -1,5 +1,5 @@
 import { supabase } from './supabase';
-import { extractSlug } from './wikitext';
+import { extractSlug, extractSlugs } from './wikitext';
 
 // 1銘柄分のフルプロトタイプ: 豆 + 関連する農園・産地・精製方法を read-only で取得する
 export async function fetchBeanStory(beanId) {
@@ -20,11 +20,22 @@ export async function fetchBeanStory(beanId) {
     processSlug ? supabase.from('processes').select('*').eq('slug', processSlug).maybeSingle() : { data: null },
   ]);
 
+  // 品種・精製方法の解説（termsテーブル）。リンクが無い豆では空になり、画面側で非表示にする
+  const varietySlugs = extractSlugs(bean.variety, 'term');
+  const processTermSlugs = extractSlugs(bean.process, 'term');
+  const allTermSlugs = [...new Set([...varietySlugs, ...processTermSlugs])];
+  const termsRes = allTermSlugs.length
+    ? await supabase.from('terms').select('slug,name,category,body').in('slug', allTermSlugs)
+    : { data: [] };
+  const termsBySlug = Object.fromEntries((termsRes.data ?? []).map((t) => [t.slug, t]));
+
   return {
     bean,
     farm: farmRes.data,
     country: countryRes.data,
     process: processRes.data,
+    varietyTerms: varietySlugs.map((s) => termsBySlug[s]).filter((t) => t?.body),
+    processTerm: processTermSlugs.map((s) => termsBySlug[s]).find((t) => t?.body) ?? null,
   };
 }
 

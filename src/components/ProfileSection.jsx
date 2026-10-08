@@ -16,7 +16,7 @@ export default function ProfileSection({ bean, farm, process }) {
   const tags = extractFlavorTags(bean.taste_ja);
 
   return (
-    <section className="max-w-2xl mx-auto px-6 pb-20">
+    <section className="max-w-2xl mx-auto px-6 pb-14">
       <p className="text-[10px] tracking-[0.28em] mb-4" style={{ color: '#9a9080' }}>FLAVOR NOTES — フレーバーノート</p>
 
       {tags.length > 0 && (

@@ -16,3 +16,15 @@ export function extractSlug(text, type) {
   }
   return null;
 }
+
+// 指定タイプのスラッグをすべて抽出する（例: 品種欄に複数のterm:リンクがある場合）
+export function extractSlugs(text, type) {
+  if (!text) return [];
+  const out = [];
+  WIKI_RE.lastIndex = 0;
+  let match;
+  while ((match = WIKI_RE.exec(text)) !== null) {
+    if (match[2] === type) out.push(match[3]);
+  }
+  return out;
+}
