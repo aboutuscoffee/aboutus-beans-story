@@ -1,4 +1,4 @@
-import { flowText } from '../lib/text';
+import { flowText, formatAltitude } from '../lib/text';
 import { stripWiki } from '../lib/wikitext';
 import { buildStoryBlocks, termParagraphs } from '../lib/storyBlocks';
 import Reveal from './Reveal';
@@ -21,7 +21,7 @@ function SpecList({ bean, farm }) {
   const items = [
     ['Producer', bean.producer],
     ['Region', regionFor(bean, farm)],
-    ['Altitude', bean.altitude],
+    ['Altitude', formatAltitude(bean.altitude)],
     ['Variety', flowText(bean.variety)],
     ['Process', flowText(bean.process)],
   ].filter(([, v]) => v);

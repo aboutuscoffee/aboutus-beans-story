@@ -1,4 +1,4 @@
-import { flowText, extractFlavorTags } from '../lib/text';
+import { flowText, extractFlavorTags, formatAltitude } from '../lib/text';
 import RadarChart from './RadarChart';
 import Accordion from './Accordion';
 
@@ -46,7 +46,7 @@ export default function ProfileSection({ bean, farm, process }) {
           <SpecRow label="産地" value={farm?.country_name} />
           <SpecRow label="地域・農園" value={farm?.location ?? farm?.name} />
           <SpecRow label="生産者" value={bean.producer} />
-          <SpecRow label="標高" value={bean.altitude} />
+          <SpecRow label="標高" value={formatAltitude(bean.altitude)} />
         </Accordion>
         <Accordion title="品種・精製方法">
           <SpecRow label="品種" value={flowText(bean.variety)} />

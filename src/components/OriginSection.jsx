@@ -1,4 +1,5 @@
 import RouteMap from './RouteMap';
+import { formatAltitude } from '../lib/text';
 
 function parseChips(raw) {
   if (!raw) return [];
@@ -15,7 +16,7 @@ export default function OriginSection({ bean, farm, country }) {
         countrySlug={country?.slug}
         farm={farm}
         caption={`${(farm?.location ?? country?.region ?? '').toUpperCase()}, ${country?.name?.toUpperCase() ?? ''}`}
-        altitude={bean.altitude}
+        altitude={formatAltitude(bean.altitude)}
       />
 
       {chips.length > 0 && (

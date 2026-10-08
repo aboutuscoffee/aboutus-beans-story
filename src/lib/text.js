@@ -19,3 +19,11 @@ export function extractFlavorTags(tasteText) {
     .map((s) => s.trim())
     .filter(Boolean);
 }
+
+// 標高の表記ゆれ（「1700」「2450+」「1,800〜2,000m」）を揃え、単位 m が無ければ付ける
+export function formatAltitude(value) {
+  if (!value) return '';
+  const v = String(value).trim();
+  if (/m/i.test(v)) return v;
+  return /\+$/.test(v) ? `${v.slice(0, -1)}m+` : `${v}m`;
+}
