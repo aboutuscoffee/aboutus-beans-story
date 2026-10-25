@@ -8,6 +8,11 @@ export const CURATED_IMAGES = {
   },
 };
 
+// ヒーローに実写写真を指定している豆は写真を全面表示、それ以外（シールカード1枚の豆）は水彩のヒーローにする
+export function heroIsPhoto(bean) {
+  return Boolean(CURATED_IMAGES[bean.id]?.hero);
+}
+
 export function heroImageFor(bean) {
   return CURATED_IMAGES[bean.id]?.hero ?? bean.image_urls?.[0] ?? null;
 }
