@@ -192,14 +192,32 @@ export default function HomeMap({ beans }) {
                   </>
                 )}
                 <circle cx={p.x} cy={p.y} r={p.r * 1.5} fill="transparent" />
-                {on && <circle cx={p.x} cy={p.y} r={p.r * 1.45} fill="none" stroke="#1a181a" strokeWidth={1.5 * u} />}
-                <circle cx={p.x} cy={p.y} r={p.r * (on ? 1.12 : 1)} fill="#443A35" opacity="0.94" stroke="#fff" strokeWidth={2 * u} />
-                <text x={p.x} y={p.y + 5 * u} textAnchor="middle" fontSize={15 * u} fill="#fff" fontWeight="500">
+                {on && <circle cx={p.x} cy={p.y} r={p.r * 1.35} fill="none" stroke="#6b5a45" strokeWidth={0.9 * u} />}
+                <circle cx={p.x} cy={p.y} r={p.r * 0.85} fill="#6b5a45" opacity={on ? 0.9 : 0.72} stroke="rgba(250,249,246,.9)" strokeWidth={1.2 * u} />
+                <text
+                  x={p.x}
+                  y={p.y + 4.5 * u}
+                  textAnchor="middle"
+                  fontSize={14 * u}
+                  fill="#faf9f6"
+                  style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}
+                >
                   {p.c.list.length}
                 </text>
-                <text x={p.x} y={p.y - p.r - 4 * u} textAnchor="middle" fontSize={14 * u}>
-                  {p.c.flag}
-                </text>
+                {on && <text
+                  x={p.x}
+                  y={p.y - p.r * 0.85 - 4 * u}
+                  textAnchor="middle"
+                  fontSize={9.5 * u}
+                  fill="#4a4038"
+                  stroke="rgba(250,249,246,.85)"
+                  strokeWidth={2.4 * u}
+                  paintOrder="stroke"
+                  letterSpacing={0.6 * u}
+                  style={{ fontFamily: "'Noto Serif JP', serif" }}
+                >
+                  {p.c.name}
+                </text>}
               </g>
             );
           })}
@@ -219,8 +237,8 @@ export default function HomeMap({ beans }) {
                 onClick={() => selectBean(b.bean.id, true)}
               >
                 <circle cx={x} cy={y} r={r * 2.2} fill="transparent" />
-                {on && <circle cx={x} cy={y} r={r * 2} fill="none" stroke="#1a181a" strokeWidth={1.4 * u} />}
-                <circle cx={x} cy={y} r={r * (on ? 1.25 : 1)} fill="#443A35" stroke="#fff" strokeWidth={2 * u} />
+                {on && <circle cx={x} cy={y} r={r * 2} fill="none" stroke="#6b5a45" strokeWidth={0.9 * u} />}
+                <circle cx={x} cy={y} r={r * (on ? 1.1 : 0.8)} fill="#6b5a45" opacity="0.9" stroke="rgba(250,249,246,.9)" strokeWidth={1.4 * u} />
                 <text
                   x={x}
                   y={below ? y + r * 3.1 : y - r * 1.9}
@@ -244,13 +262,13 @@ export default function HomeMap({ beans }) {
             <button
               type="button"
               onClick={enterWorld}
-              className="absolute left-2.5 top-2.5 rounded-full bg-white px-3.5 py-1.5 text-[11.5px]"
-              style={{ boxShadow: '0 2px 8px rgba(0,0,0,.2)' }}
+              className="absolute left-2.5 top-2.5 rounded-full px-3.5 py-1.5 font-serif-jp text-[11px] tracking-[0.12em]"
+              style={{ background: 'rgba(250,249,246,.82)', color: '#4a4038', backdropFilter: 'blur(4px)' }}
             >
-              🌍 世界
+              ← 世界
             </button>
-            <div className="absolute right-2.5 top-2.5 rounded-full px-3 py-1.5 text-[11.5px]" style={{ background: 'rgba(255,255,255,.92)' }}>
-              {cur.flag} {cur.name}　{cur.list.length}銘柄
+            <div className="absolute right-2.5 top-2.5 rounded-full px-3 py-1.5 font-serif-jp text-[11px] tracking-[0.12em]" style={{ background: 'rgba(250,249,246,.82)', color: '#4a4038', backdropFilter: 'blur(4px)' }}>
+              {cur.name}　{cur.list.length}銘柄
             </div>
           </>
         )}
@@ -292,8 +310,11 @@ export default function HomeMap({ beans }) {
                       style={{ width: 164, height: 228, background: '#e6e1d6', boxShadow: '0 6px 18px rgba(26,24,26,.16)' }}
                     />
                   )}
-                  <span className="absolute left-2 top-2 rounded-[10px] px-[7px] py-0.5 text-[13px] leading-snug" style={{ background: 'rgba(255,255,255,.92)' }}>
-                    {b.country?.flag}
+                  <span
+                    className="absolute left-2 top-2 rounded-full px-2.5 py-[3px] font-serif-jp text-[10px] leading-snug tracking-[0.12em]"
+                    style={{ background: 'rgba(250,249,246,.78)', color: '#4a4038', backdropFilter: 'blur(4px)' }}
+                  >
+                    {b.country?.name}
                   </span>
                 </button>
               );
@@ -306,7 +327,7 @@ export default function HomeMap({ beans }) {
       {mode === 'country' && cur && (
         <div className="pb-16">
           <div className="flex items-baseline gap-2.5 px-[18px] pt-[18px] pb-1.5">
-            <p className="font-serif-jp text-[15px]">{cur.flag} {cur.name}</p>
+            <p className="font-serif-jp text-[15px]">{cur.name}</p>
             <p className="text-[11px] tracking-[0.1em]" style={{ color: '#9a9080' }}>{cur.list.length}銘柄</p>
           </div>
           {cur.list.map((b) => (
