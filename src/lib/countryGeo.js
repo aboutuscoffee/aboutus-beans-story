@@ -8,5 +8,6 @@ export const COUNTRY_GEO = {
   ecuador: { atlasName: 'Ecuador', capital: 'QUITO', capitalLat: -0.1807, capitalLng: -78.4678 },
   honduras: { atlasName: 'Honduras', capital: 'TEGUCIGALPA', capitalLat: 14.0723, capitalLng: -87.1921 },
   'costa-rica': { atlasName: 'Costa Rica', capital: 'SAN JOSÉ', capitalLat: 9.9281, capitalLng: -84.0907 },
+  peru: { atlasName: 'Peru', capital: 'LIMA', capitalLat: -12.0464, capitalLng: -77.0428, fallbackLat: -13.5, fallbackLng: -71.97 },
   guatemala: { atlasName: 'Guatemala', capital: 'GUATEMALA CITY', capitalLat: 14.6349, capitalLng: -90.5069 },
 };
