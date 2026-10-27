@@ -36,7 +36,7 @@ function groupByCountry(beans) {
     const lng = b.lng ?? geo?.fallbackLng ?? geo?.capitalLng ?? null;
     if (lat == null || lng == null) return;
     const item = { ...b, slug, x: px(lng), y: py(lat), tags: extractFlavorTags(b.bean.taste_ja) };
-    (map[slug] ??= { slug, name: b.country?.name ?? '', en: (geo?.atlasName ?? b.country?.name ?? '').toUpperCase(), flag: b.country?.flag ?? '', list: [] }).list.push(item);
+    (map[slug] ??= { slug, name: b.country?.name ?? '', en: geo?.atlasName ?? b.country?.name ?? '', flag: b.country?.flag ?? '', list: [] }).list.push(item);
   });
   const groups = Object.values(map).map((c) => ({
     ...c,
@@ -196,9 +196,9 @@ export default function HomeMap({ beans }) {
                 <circle cx={p.x} cy={p.y} r={p.r * 0.85} fill="#6b5a45" opacity={on ? 0.9 : 0.72} stroke="rgba(250,249,246,.9)" strokeWidth={1.2 * u} />
                 <text
                   x={p.x}
-                  y={p.y + 3.8 * u}
+                  y={p.y + 3.3 * u}
                   textAnchor="middle"
-                  fontSize={12 * u}
+                  fontSize={10.5 * u}
                   fill="#faf9f6"
                   style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}
                 >
@@ -208,12 +208,12 @@ export default function HomeMap({ beans }) {
                   x={Math.max(p.x, vb.x + 30 * u)}
                   y={p.y - p.r * 0.85 - 4 * u}
                   textAnchor="middle"
-                  fontSize={10.5 * u}
+                  fontSize={8.5 * u}
                   fill="#4a4038"
                   stroke="rgba(250,249,246,.85)"
                   strokeWidth={2.4 * u}
                   paintOrder="stroke"
-                  letterSpacing={1.2 * u}
+                  letterSpacing={0.5 * u}
                   style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 500 }}
                 >
                   {p.c.en}
@@ -243,7 +243,7 @@ export default function HomeMap({ beans }) {
                   x={x}
                   y={below ? y + r * 3.1 : y - r * 1.9}
                   textAnchor="middle"
-                  fontSize={11 * u}
+                  fontSize={9 * u}
                   fill="#1a181a"
                   stroke="#fff"
                   strokeWidth={3 * u}
@@ -262,12 +262,12 @@ export default function HomeMap({ beans }) {
             <button
               type="button"
               onClick={enterWorld}
-              className="absolute left-2.5 top-2.5 rounded-full px-3.5 py-1.5 font-serif-jp text-[11px] tracking-[0.12em]"
+              className="absolute left-2.5 top-2.5 rounded-full px-3.5 py-1.5 font-serif-jp text-[10px] tracking-[0.1em]"
               style={{ background: 'rgba(250,249,246,.82)', color: '#4a4038', backdropFilter: 'blur(4px)' }}
             >
               ← 世界
             </button>
-            <div className="absolute right-2.5 top-2.5 rounded-full px-3 py-1.5 font-serif-jp text-[11px] tracking-[0.12em]" style={{ background: 'rgba(250,249,246,.82)', color: '#4a4038', backdropFilter: 'blur(4px)' }}>
+            <div className="absolute right-2.5 top-2.5 rounded-full px-3 py-1.5 font-serif-jp text-[10px] tracking-[0.1em]" style={{ background: 'rgba(250,249,246,.82)', color: '#4a4038', backdropFilter: 'blur(4px)' }}>
               {cur.en}　{cur.list.length}
             </div>
           </>
