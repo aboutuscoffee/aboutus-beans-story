@@ -36,7 +36,7 @@ function groupByCountry(beans) {
     const lng = b.lng ?? geo?.fallbackLng ?? geo?.capitalLng ?? null;
     if (lat == null || lng == null) return;
     const item = { ...b, slug, x: px(lng), y: py(lat), tags: extractFlavorTags(b.bean.taste_ja) };
-    (map[slug] ??= { slug, name: b.country?.name ?? '', flag: b.country?.flag ?? '', list: [] }).list.push(item);
+    (map[slug] ??= { slug, name: b.country?.name ?? '', en: (geo?.atlasName ?? b.country?.name ?? '').toUpperCase(), flag: b.country?.flag ?? '', list: [] }).list.push(item);
   });
   const groups = Object.values(map).map((c) => ({
     ...c,
@@ -205,18 +205,18 @@ export default function HomeMap({ beans }) {
                   {p.c.list.length}
                 </text>
                 {on && <text
-                  x={p.x}
+                  x={Math.max(p.x, vb.x + 30 * u)}
                   y={p.y - p.r * 0.85 - 4 * u}
                   textAnchor="middle"
-                  fontSize={9.5 * u}
+                  fontSize={10.5 * u}
                   fill="#4a4038"
                   stroke="rgba(250,249,246,.85)"
                   strokeWidth={2.4 * u}
                   paintOrder="stroke"
-                  letterSpacing={0.6 * u}
-                  style={{ fontFamily: "'Noto Serif JP', serif" }}
+                  letterSpacing={1.2 * u}
+                  style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 500 }}
                 >
-                  {p.c.name}
+                  {p.c.en}
                 </text>}
               </g>
             );
@@ -268,7 +268,7 @@ export default function HomeMap({ beans }) {
               ← 世界
             </button>
             <div className="absolute right-2.5 top-2.5 rounded-full px-3 py-1.5 font-serif-jp text-[11px] tracking-[0.12em]" style={{ background: 'rgba(250,249,246,.82)', color: '#4a4038', backdropFilter: 'blur(4px)' }}>
-              {cur.name}　{cur.list.length}銘柄
+              {cur.en}　{cur.list.length}
             </div>
           </>
         )}
@@ -310,12 +310,6 @@ export default function HomeMap({ beans }) {
                       style={{ width: 164, height: 228, background: '#e6e1d6', boxShadow: '0 6px 18px rgba(26,24,26,.16)' }}
                     />
                   )}
-                  <span
-                    className="absolute left-2 top-2 rounded-full px-2.5 py-[3px] font-serif-jp text-[10px] leading-snug tracking-[0.12em]"
-                    style={{ background: 'rgba(250,249,246,.78)', color: '#4a4038', backdropFilter: 'blur(4px)' }}
-                  >
-                    {b.country?.name}
-                  </span>
                 </button>
               );
             })}
