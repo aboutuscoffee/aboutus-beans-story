@@ -49,7 +49,7 @@ function groupByCountry(beans) {
 
 // 近接する丸を押し合って重ならないようにする
 function spreadBubbles(groups, u) {
-  const items = groups.map((c) => ({ c, ox: c.x, oy: c.y, x: c.x, y: c.y, r: (11 + c.list.length * 3) * u }));
+  const items = groups.map((c) => ({ c, ox: c.x, oy: c.y, x: c.x, y: c.y, r: (8 + c.list.length * 2) * u }));
   for (let it = 0; it < 80; it++) {
     for (const a of items) for (const b of items) {
       if (a === b) continue;
@@ -196,9 +196,9 @@ export default function HomeMap({ beans }) {
                 <circle cx={p.x} cy={p.y} r={p.r * 0.85} fill="#6b5a45" opacity={on ? 0.9 : 0.72} stroke="rgba(250,249,246,.9)" strokeWidth={1.2 * u} />
                 <text
                   x={p.x}
-                  y={p.y + 4.5 * u}
+                  y={p.y + 3.8 * u}
                   textAnchor="middle"
-                  fontSize={14 * u}
+                  fontSize={12 * u}
                   fill="#faf9f6"
                   style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 400 }}
                 >
