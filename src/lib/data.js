@@ -41,8 +41,13 @@ export async function fetchBeanStory(beanId) {
 }
 
 // ホーム画面の世界地図・横スクロールカード用: リリース中の豆を、ピン座標込みで取得する
-export async function fetchReleasedBeans() {
-  const { data: beans, error } = await supabase.from('beans').select('*').eq('status', 'リリース中');
+export const fetchReleasedBeans = () => fetchBeansByStatus('リリース中');
+
+// 終売した豆（アーカイブ用）
+export const fetchArchivedBeans = () => fetchBeansByStatus('終売');
+
+async function fetchBeansByStatus(status) {
+  const { data: beans, error } = await supabase.from('beans').select('*').eq('status', status);
   if (error) throw new Error(error.message);
 
   const farmSlugs = new Set();

@@ -21,7 +21,7 @@ body,
 body {
   margin: 0;
   font-family: 'Noto Sans JP', sans-serif;
-  background: #FAFAF8;
+  background: #f3f0e8;
   color: #1A181A;
 }
 
@@ -88,4 +88,16 @@ select {
   word-break: auto-phrase;
   line-break: strict;
   text-wrap: pretty;
+}
+
+.ripple-ring {
+  animation: ripple-ring 2.7s ease-out infinite;
+  opacity: 0;
+}
+@keyframes ripple-ring {
+  0% { transform: scale(0.1); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ripple-ring { animation: none; opacity: 0.4; transform: scale(0.6); }
 }

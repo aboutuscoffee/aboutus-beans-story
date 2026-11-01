@@ -2,10 +2,10 @@ import { feature } from 'topojson-client';
 
 let cached = null;
 
-// 110m解像度の軽量な世界地図データ（国境ポリゴン）を1度だけ取得してキャッシュする
+// 50m解像度の世界地図データ（国境ポリゴン）を1度だけ取得してキャッシュする
 export async function fetchWorldLand() {
   if (cached) return cached;
-  const res = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-110m.json');
+  const res = await fetch('https://cdn.jsdelivr.net/npm/world-atlas@2/countries-50m.json');
   const topo = await res.json();
   cached = feature(topo, topo.objects.countries);
   return cached;

@@ -3,6 +3,13 @@ import { Link } from 'react-router-dom';
 import { fetchWorldLand, geometryToPath } from '../lib/worldGeo';
 import { COUNTRY_GEO } from '../lib/countryGeo';
 import { extractFlavorTags, formatAltitude } from '../lib/text';
+import { useLang } from '../lib/lang';
+import StoreBadges from './StoreBadges';
+
+const SEA = '#e9e5db';
+const LAND = '#d9cfbd';
+const LAND_LINE = '#bfb39c';
+const LINES = [[0, 0.9, '赤道'], [23.44, 0.5], [-23.44, 0.5]];
 
 // 等長方形図法（経度・緯度をそのままviewBox座標へ）
 const px = (lng) => (lng + 100) * 4;
@@ -64,6 +71,7 @@ function spreadBubbles(groups, u) {
 }
 
 export default function HomeMap({ beans }) {
+  const { lang, tr } = useLang();
   const groups = useMemo(() => groupByCountry(beans), [beans]);
   const bySlug = useMemo(() => Object.fromEntries(groups.map((c) => [c.slug, c])), [groups]);
   const ordered = useMemo(() => groups.flatMap((c) => c.list), [groups]);
@@ -164,15 +172,18 @@ export default function HomeMap({ beans }) {
 
   return (
     <div>
-      <div className="relative overflow-hidden" style={{ aspectRatio: `${W0} / ${MAPH}`, background: '#dfe6e3' }}>
+      <div className="relative overflow-hidden" style={{ aspectRatio: `${W0} / ${MAPH}`, background: SEA }}>
         <svg
           viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.w * RATIO}`}
           preserveAspectRatio="xMidYMid slice"
           className="block w-full h-full"
         >
-          <rect x="-300" y="-300" width="1800" height="1200" fill="#dfe6e3" />
+          <rect x="-300" y="-300" width="1800" height="1200" fill={SEA} />
           {world?.all.map((d, i) => (
-            <path key={i} d={d} fill="#e8e0d5" stroke="#c9bfae" strokeWidth="0.5" />
+            <path key={i} d={d} fill={LAND} stroke={LAND_LINE} strokeWidth="0.4" />
+          ))}
+          {LINES.map(([lat, w]) => (
+            <line key={lat} x1="-300" x2="1500" y1={py(lat)} y2={py(lat)} stroke="#8a7a55" strokeOpacity="0.45" strokeWidth={w * (vb.w / W0)} strokeDasharray={lat === 0 ? undefined : `${3 * (vb.w / W0)} ${3 * (vb.w / W0)}`} />
           ))}
           {hl && <path d={hl.d} fill="#f5e4ac" stroke="#8a7a55" strokeWidth="0.7" />}
 
@@ -216,7 +227,7 @@ export default function HomeMap({ beans }) {
                   letterSpacing={0.5 * u}
                   style={{ fontFamily: "'Cormorant Garamond', serif", fontWeight: 500 }}
                 >
-                  {p.c.en}
+                  {lang === 'en' ? p.c.en : p.c.name}
                 </text>}
               </g>
             );
@@ -265,20 +276,20 @@ export default function HomeMap({ beans }) {
               className="absolute left-2.5 top-2.5 rounded-full px-3.5 py-1.5 font-serif-jp text-[10px] tracking-[0.1em]"
               style={{ background: 'rgba(250,249,246,.82)', color: '#4a4038', backdropFilter: 'blur(4px)' }}
             >
-              ← 世界
+              {tr('← 世界', '← World')}
             </button>
             <div className="absolute right-2.5 top-2.5 rounded-full px-3 py-1.5 font-serif-jp text-[10px] tracking-[0.1em]" style={{ background: 'rgba(250,249,246,.82)', color: '#4a4038', backdropFilter: 'blur(4px)' }}>
-              {cur.en}　{cur.list.length}
+              {lang === 'en' ? cur.en : cur.name}　{cur.list.length}
             </div>
           </>
         )}
       </div>
 
       {mode === 'world' && (
-        <div className="pb-16">
+        <div className="pb-8">
           <div className="flex items-baseline justify-between px-[18px] pt-3.5 pb-1.5">
-            <p className="font-serif-jp text-[15px]">いま飲める{ordered.length}銘柄</p>
-            <p className="text-[11px] tracking-[0.08em]" style={{ color: '#9a9080' }}>← 横にスワイプ →</p>
+            <p className="font-serif-jp text-[15px]">{tr(`いま飲める${ordered.length}銘柄`, `${ordered.length} coffees now serving`)}</p>
+            <p className="text-[11px] tracking-[0.08em]" style={{ color: '#9a9080' }}>{tr('← 横にスワイプ →', '← swipe →')}</p>
           </div>
           <div
             ref={stripRef}
@@ -310,19 +321,20 @@ export default function HomeMap({ beans }) {
                       style={{ width: 164, height: 228, background: '#e6e1d6', boxShadow: '0 6px 18px rgba(26,24,26,.16)' }}
                     />
                   )}
+                  <StoreBadges bean={b.bean} className="absolute right-2 top-2" />
                 </button>
               );
             })}
           </div>
-          <p className="px-[18px] text-[11px]" style={{ color: '#8a8070' }}>丸かカードをタップすると、その国へ寄ります。</p>
+          <p className="px-[18px] text-[11px]" style={{ color: '#8a8070' }}>{tr('丸かカードをタップすると、その国へ寄ります。', 'Tap a circle or a card to zoom into the country.')}</p>
         </div>
       )}
 
       {mode === 'country' && cur && (
-        <div className="pb-16">
+        <div className="pb-8">
           <div className="flex items-baseline gap-2.5 px-[18px] pt-[18px] pb-1.5">
-            <p className="font-serif-jp text-[15px]">{cur.name}</p>
-            <p className="text-[11px] tracking-[0.1em]" style={{ color: '#9a9080' }}>{cur.list.length}銘柄</p>
+            <p className="font-serif-jp text-[15px]">{lang === 'en' ? cur.en : cur.name}</p>
+            <p className="text-[11px] tracking-[0.1em]" style={{ color: '#9a9080' }}>{tr(`${cur.list.length}銘柄`, `${cur.list.length} coffees`)}</p>
           </div>
           {cur.list.map((b) => (
             <Link
@@ -345,9 +357,12 @@ export default function HomeMap({ beans }) {
                 )}
                 <span className="min-w-0">
                   <span className="block font-serif-jp text-[14px] leading-[1.45]">{b.bean.name}</span>
+                  {Array.isArray(b.bean.stores) && b.bean.stores.length > 0 && (
+                    <span className="block mt-1"><StoreBadges bean={b.bean} /></span>
+                  )}
                   <span className="block mt-[3px] text-[11px]" style={{ color: '#8a8070' }}>
                     {(b.tags.length ? b.tags : ['—']).slice(0, 3).join('・')}
-                    {b.bean.altitude ? `　標高 ${formatAltitude(b.bean.altitude)}` : ''}
+                    {b.bean.altitude ? `　${tr('標高', 'Alt.')} ${formatAltitude(b.bean.altitude)}` : ''}
                   </span>
                 </span>
               </span>

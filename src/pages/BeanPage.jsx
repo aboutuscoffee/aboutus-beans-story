@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
+import Ripple from '../components/Ripple';
 import { fetchBeanStory } from '../lib/data';
 import { heroImageFor, galleryImagesFor, firstGalleryIsSealCard, heroIsPhoto, chartImageFor } from '../lib/curatedImages';
 import { buildStoryBlocks } from '../lib/storyBlocks';
@@ -57,10 +58,11 @@ export default function BeanPage() {
   }
 
   if (!story) {
-    return <div className="min-h-screen flex items-center justify-center text-sm text-stone-400">Loading...</div>;
+    return <Ripple label="Loading" className="min-h-screen" />;
   }
 
   const { bean, farm, country, process, varietyTerms, processTerm } = story;
+  const ended = bean.status === '終売';
 
   // 写真は 左→右→左… と交互に並ぶ。産地マップは、直前の写真と反対側に置く
   const galleryImages = galleryImagesFor(bean);
@@ -80,10 +82,10 @@ export default function BeanPage() {
       <StorySection bean={bean} farm={farm} images={galleryImages} chartCropFirst={firstGalleryIsSealCard(bean)} varietyTerms={varietyTerms} process={process} processTerm={processTerm} />
       <Reveal><OriginSection bean={bean} farm={farm} country={country} mapOnRight={lastPhotoOnLeft} /></Reveal>
       <Reveal><ProfileSection bean={bean} farm={farm} process={process} /></Reveal>
-      <Reveal><CtaSection bean={bean} /></Reveal>
+      <Reveal>{ended ? <p className="text-center py-12 font-display text-[12px] tracking-[0.24em]" style={{ color: '#9a9080' }}>This coffee has ended</p> : <CtaSection bean={bean} />}</Reveal>
       <Recommended bean={bean} country={country} />
       <SiteFooter />
-      <StickyBuyBar bean={bean} />
+      {!ended && <StickyBuyBar bean={bean} />}
     </div>
   );
 }
