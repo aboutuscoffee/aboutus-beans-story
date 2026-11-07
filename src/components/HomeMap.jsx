@@ -180,12 +180,12 @@ export default function HomeMap({ beans }) {
         >
           <rect x="-300" y="-300" width="1800" height="1200" fill={SEA} />
           {world?.all.map((d, i) => (
-            <path key={i} d={d} fill={LAND} stroke={LAND_LINE} strokeWidth="0.4" />
+            <path key={i} d={d} fill={LAND} stroke={LAND_LINE} strokeWidth="0.5" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />
           ))}
           {LINES.map(([lat, w]) => (
-            <line key={lat} x1="-300" x2="1500" y1={py(lat)} y2={py(lat)} stroke="#8a7a55" strokeOpacity="0.45" strokeWidth={w * (vb.w / W0)} strokeDasharray={lat === 0 ? undefined : `${3 * (vb.w / W0)} ${3 * (vb.w / W0)}`} />
+            <line key={lat} x1="-300" x2="1500" y1={py(lat)} y2={py(lat)} stroke="#8a7a55" strokeOpacity="0.45" strokeWidth={w} vectorEffect="non-scaling-stroke" strokeDasharray={lat === 0 ? undefined : '4 4'} />
           ))}
-          {hl && <path d={hl.d} fill="#f5e4ac" stroke="#8a7a55" strokeWidth="0.7" />}
+          {hl && <path d={hl.d} fill="#f5e4ac" stroke="#8a7a55" strokeWidth="1" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />}
 
           {bubbleItems.map((p) => {
             const on = centerSlug === p.c.slug;
@@ -261,7 +261,7 @@ export default function HomeMap({ beans }) {
                   paintOrder="stroke"
                   fontWeight={on ? 600 : 500}
                 >
-                  {b.bean.name.slice(0, 16)}
+                  {b.bean.name.slice(0, 24)}
                 </text>
               </g>
             );

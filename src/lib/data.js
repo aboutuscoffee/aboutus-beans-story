@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import { extractSlug, extractSlugs } from './wikitext';
+import { FARM_GEO_FALLBACK } from './farmGeoFallback';
 
 // 1銘柄分のフルプロトタイプ: 豆 + 関連する農園・産地・精製方法を read-only で取得する
 export async function fetchBeanStory(beanId) {
@@ -72,8 +73,9 @@ async function fetchBeansByStatus(status) {
   return withSlugs.map(({ bean, farmSlug, countrySlug }) => {
     const farm = farmSlug ? farmsBySlug[farmSlug] : null;
     const country = countrySlug ? countriesBySlug[countrySlug] : null;
-    const lat = farm?.lat ?? country?.lat ?? null;
-    const lng = farm?.lng ?? country?.lng ?? null;
+    const fb = FARM_GEO_FALLBACK[farmSlug];
+    const lat = farm?.lat ?? fb?.lat ?? country?.lat ?? null;
+    const lng = farm?.lng ?? fb?.lng ?? country?.lng ?? null;
     return { bean, farm, country, lat, lng };
   });
 }
