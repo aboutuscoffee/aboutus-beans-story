@@ -29,7 +29,7 @@ export default function RouteMap({ countrySlug, farm, caption, altitude }) {
   return (
     <div
       className="relative overflow-hidden rounded-lg"
-      style={{ background: '#1A181A', aspectRatio: '4 / 5', maxHeight: '520px' }}
+      style={{ background: '#1A181A', aspectRatio: '1 / 1', maxHeight: '320px' }}
     >
       <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className="w-full h-full" preserveAspectRatio="xMidYMid meet">
         <defs>
@@ -72,14 +72,10 @@ export default function RouteMap({ countrySlug, farm, caption, altitude }) {
         )}
       </svg>
 
-      <div className="absolute left-5 bottom-5 text-[11px] tracking-[0.14em]" style={{ color: 'rgba(248,246,242,0.55)' }}>
-        {caption}
+      <div className="absolute left-3.5 right-3.5 bottom-3 flex flex-col gap-0.5 text-[9.5px] tracking-[0.1em] leading-snug" style={{ color: 'rgba(248,246,242,0.55)' }}>
+        <span>{caption}</span>
+        {altitude && <span>ALT. {altitude}</span>}
       </div>
-      {altitude && (
-        <div className="absolute right-5 bottom-5 text-[11px] tracking-[0.1em]" style={{ color: 'rgba(248,246,242,0.55)' }}>
-          ALT. {altitude}
-        </div>
-      )}
 
       <style>{`
         .route-dash {

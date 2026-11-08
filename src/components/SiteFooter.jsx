@@ -37,9 +37,12 @@ export default function SiteFooter() {
           </svg>
         </IconLink>
       </div>
-      <p className="font-display font-light tracking-[0.14em] mt-8" style={{ fontSize: '14px', color: '#9a9080', margin: '2rem 0 0' }}>
-        ABOUT US COFFEE
-      </p>
+      <img
+        src={`${import.meta.env.BASE_URL}logo-wordmark.png`}
+        alt="ABOUT US COFFEE"
+        className="mx-auto block"
+        style={{ width: '150px', height: 'auto', margin: '2rem auto 0', filter: 'invert(1)', opacity: 0.55 }}
+      />
     </footer>
   );
 }

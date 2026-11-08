@@ -72,11 +72,14 @@ export default function Home() {
   return (
     <div className="min-h-screen font-sans-jp" style={{ backgroundColor: PAGE_BG }}>
       <div className="max-w-xl mx-auto relative">
-        <LangToggle className="absolute right-4 top-4 z-10" />
+        <LangToggle className="absolute right-4 top-2 z-10" />
         <header className="text-center px-6 pt-8 pb-4">
-          <p className="font-display font-light tracking-[0.14em]" style={{ fontSize: '20px', color: '#1A181A' }}>
-            ABOUT US COFFEE
-          </p>
+          <img
+            src={`${import.meta.env.BASE_URL}logo-wordmark.png`}
+            alt="ABOUT US COFFEE"
+            className="mx-auto block"
+            style={{ width: 'min(240px, 62vw)', height: 'auto' }}
+          />
           <p className="text-[10px] tracking-[0.16em] mt-2" style={{ color: '#9a9080' }}>
             {tr('世界地図で、いま飲めるコーヒーを巡る', 'Travel the world, one cup at a time')}
           </p>

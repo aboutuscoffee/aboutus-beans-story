@@ -85,7 +85,7 @@ function WatercolorHero({ bean, farm, country, frontImage, chartImage }) {
             width: `calc(clamp(220px, 30vw, 340px) * ${k})`,
             height: `calc(clamp(220px, 30vw, 340px) * ${k})`,
             transform: 'translate(-50%, 0)',
-            filter: 'blur(34px) saturate(1.45)',
+            filter: 'blur(30px) saturate(1.2)',
             mixBlendMode: 'multiply',
             opacity: 0.95,
           }}
