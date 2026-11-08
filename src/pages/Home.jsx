@@ -73,7 +73,13 @@ export default function Home() {
     <div className="min-h-screen font-sans-jp" style={{ backgroundColor: PAGE_BG }}>
       <div className="max-w-xl mx-auto relative">
         <LangToggle className="absolute right-4 top-2 z-10" />
-        <header className="text-center px-6 pt-8 pb-4">
+        <header className="text-center px-6 pt-7 pb-4">
+          <img
+            src={`${import.meta.env.BASE_URL}logo-emblem.png`}
+            alt=""
+            className="mx-auto block mb-3"
+            style={{ width: 52, height: 'auto' }}
+          />
           <img
             src={`${import.meta.env.BASE_URL}logo-wordmark.png`}
             alt="ABOUT US COFFEE"
