@@ -10,11 +10,11 @@ function softened(r, g, b) {
   const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
   let h = d === 0 ? 0 : mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
   h = (h * 60 + 360) % 360;
-  return `hsl(${Math.round(h)}, ${Math.round(Math.min(s, 1) * 58)}%, ${Math.round(Math.min(0.9, Math.max(0.35, l)) * 100)}%)`;
+  return `hsl(${Math.round(h)}, ${Math.round(Math.min(s, 1) * 78)}%, ${Math.round(Math.min(0.9, Math.max(0.35, l)) * 100)}%)`;
 }
 
 // シールカード下部の「色のスプラッシュ」から、色相ごとの代表色を取り出す（多い順）
-function splashColors(url, max = 3) {
+function splashColors(url, max = 5) {
   if (cache.has(url)) return cache.get(url);
   const p = new Promise((resolve) => {
     const img = new Image();
@@ -31,19 +31,19 @@ function splashColors(url, max = 3) {
         const y0 = Math.floor(H * 0.55);
         const { data } = ctx.getImageData(0, y0, W, H - y0);
 
-        const buckets = Array.from({ length: 12 }, () => ({ n: 0, r: 0, g: 0, b: 0 }));
+        const buckets = Array.from({ length: 18 }, () => ({ n: 0, r: 0, g: 0, b: 0 }));
         for (let i = 0; i < data.length; i += 4) {
           const r = data[i], g = data[i + 1], b = data[i + 2];
           const mx = Math.max(r, g, b), mn = Math.min(r, g, b);
           if (mx - mn < 40) continue;
           let h = mx === r ? ((g - b) / (mx - mn)) % 6 : mx === g ? (b - r) / (mx - mn) + 2 : (r - g) / (mx - mn) + 4;
           h = (h * 60 + 360) % 360;
-          const k = buckets[Math.floor(h / 30) % 12];
+          const k = buckets[Math.floor(h / 20) % 18];
           k.n++; k.r += r; k.g += g; k.b += b;
         }
         const total = buckets.reduce((s, k) => s + k.n, 0) || 1;
         const colors = buckets
-          .filter((k) => k.n / total > 0.06)
+          .filter((k) => k.n / total > 0.04)
           .sort((a, b) => b.n - a.n)
           .slice(0, max)
           .map((k) => softened(k.r / k.n, k.g / k.n, k.b / k.n));
@@ -58,7 +58,7 @@ function splashColors(url, max = 3) {
   return p;
 }
 
-const hsl = (c, dl = 0) => `hsl(${Math.round(c.h)}, ${Math.round(Math.min(c.s, 1) * 58)}%, ${Math.round(Math.min(0.9, Math.max(0.35, c.l + dl)) * 100)}%)`;
+const hsl = (c, dl = 0) => `hsl(${Math.round(c.h)}, ${Math.round(Math.min(c.s, 1) * 78)}%, ${Math.round(Math.min(0.9, Math.max(0.35, c.l + dl)) * 100)}%)`;
 
 // ヒーローの水彩に使う5色。カード下部のスプラッシュの色を主役に、レーダーチャートの色を添える。
 // 色が足りないときは同じ色を明るさ違いで補う。
@@ -68,7 +68,7 @@ export async function cardPalette(frontUrl, chartUrl) {
     chartUrl ? sampleChartColor(chartUrl) : null,
   ]);
   const base = [...splash];
-  if (chart) base.push(hsl(chart));
+  if (chart && base.length < 3) base.push(hsl(chart));
   if (base.length === 0) return null;
   const palette = [];
   for (let i = 0; i < 5; i++) palette.push(base[i % base.length]);
