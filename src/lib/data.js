@@ -1,6 +1,7 @@
 import { supabase } from './supabase';
 import { extractSlug, extractSlugs } from './wikitext';
 import { FARM_GEO_FALLBACK, BEAN_GEO_FALLBACK } from './farmGeoFallback';
+import { TERM_BODY_OVERRIDES } from './curatedTerms';
 
 // 1銘柄分のフルプロトタイプ: 豆 + 関連する農園・産地・精製方法を read-only で取得する
 export async function fetchBeanStory(beanId) {
@@ -29,7 +30,9 @@ export async function fetchBeanStory(beanId) {
   const termsRes = allTermSlugs.length
     ? await supabase.from('terms').select('slug,name,category,body').in('slug', allTermSlugs)
     : { data: [] };
-  const termsBySlug = Object.fromEntries((termsRes.data ?? []).map((t) => [t.slug, t]));
+  const termsBySlug = Object.fromEntries(
+    (termsRes.data ?? []).map((t) => [t.slug, TERM_BODY_OVERRIDES[t.slug] ? { ...t, body: TERM_BODY_OVERRIDES[t.slug] } : t])
+  );
 
   // 農園に緯度経度が未登録でも、産地マップ（首都→農園）を出せるよう仮座標で補う
   const fb = FARM_GEO_FALLBACK[farmSlug];
