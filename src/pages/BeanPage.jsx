@@ -70,7 +70,7 @@ export default function BeanPage() {
   const lastPhotoOnLeft = photoCount > 0 && (photoCount - 1) % 2 === 0;
 
   return (
-    <div className="font-sans-jp" style={{ backgroundColor: '#FAFAF8' }}>
+    <div className="font-sans-jp" style={{ backgroundColor: '#f3f0e8' }}>
       <Link
         to="/"
         className="fixed top-5 left-5 z-10 text-[10px] tracking-[0.2em] px-3 py-2"

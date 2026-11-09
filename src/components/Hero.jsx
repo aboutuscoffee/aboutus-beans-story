@@ -3,7 +3,7 @@ import { sampleBottomColor } from '../lib/sampleColor';
 import { cardPalette } from '../lib/cardPalette';
 
 const FALLBACK_RGB = [26, 24, 26];
-const FALLBACK_PALETTE = ['#e9e3d3', '#eee8d9', '#e6e0cf', '#efe9db', '#e9e3d3'];
+const FALLBACK_PALETTE = ['#e6dfcf', '#ebe4d4', '#e3dccb', '#ece5d6', '#e6dfcf'];
 
 // 水彩のにじみ（[色の番号, 左%, 上%, 大きさの係数]）。味わいの数だけ色の玉を重ねる想定の配置
 const BLOBS = [
@@ -72,7 +72,7 @@ function WatercolorHero({ bean, farm, country, frontImage, chartImage }) {
   }, [frontImage, chartImage]);
 
   return (
-    <section className="relative h-[50svh] min-h-[420px] w-full overflow-hidden" style={{ background: '#f7f5ee' }}>
+    <section className="relative h-[50svh] min-h-[420px] w-full overflow-hidden" style={{ background: '#f3f0e8' }}>
       {BLOBS.map(([ci, left, top, k], i) => (
         <div
           key={i}
@@ -85,9 +85,9 @@ function WatercolorHero({ bean, farm, country, frontImage, chartImage }) {
             width: `calc(clamp(220px, 30vw, 340px) * ${k})`,
             height: `calc(clamp(220px, 30vw, 340px) * ${k})`,
             transform: 'translate(-50%, 0)',
-            filter: 'blur(34px) saturate(1.45)',
+            filter: 'blur(36px) saturate(1.05)',
             mixBlendMode: 'multiply',
-            opacity: 0.95,
+            opacity: 0.85,
           }}
         />
       ))}
