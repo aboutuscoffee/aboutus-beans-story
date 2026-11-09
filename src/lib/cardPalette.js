@@ -10,7 +10,7 @@ function softened(r, g, b) {
   const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
   let h = d === 0 ? 0 : mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
   h = (h * 60 + 360) % 360;
-  return `hsl(${Math.round(h)}, ${Math.round(Math.min(s, 1) * 100)}%, ${Math.round(Math.min(0.80, Math.max(0.52, l)) * 100)}%)`;
+  return `hsl(${Math.round(h)}, ${Math.round(Math.min(s, 0.85) * 100)}%, ${Math.round(Math.min(0.84, Math.max(0.64, l)) * 100)}%)`;
 }
 
 // シールカード下部の「色のスプラッシュ」から、色相ごとの代表色を取り出す（多い順）
@@ -58,7 +58,7 @@ function splashColors(url, max = 3) {
   return p;
 }
 
-const hsl = (c, dl = 0) => `hsl(${Math.round(c.h)}, ${Math.round(Math.min(c.s, 1) * 100)}%, ${Math.round(Math.min(0.80, Math.max(0.52, c.l + dl)) * 100)}%)`;
+const hsl = (c, dl = 0) => `hsl(${Math.round(c.h)}, ${Math.round(Math.min(c.s, 0.85) * 100)}%, ${Math.round(Math.min(0.82, Math.max(0.64, c.l + dl)) * 100)}%)`;
 
 // ヒーローの水彩に使う5色。カード下部のスプラッシュの色を主役に、レーダーチャートの色を添える。
 // 色が足りないときは同じ色を明るさ違いで補う。
