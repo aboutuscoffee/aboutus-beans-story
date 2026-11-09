@@ -187,7 +187,7 @@ export default function HomeMap({ beans }) {
           ))}
           {hl && <path d={hl.d} fill="#f5e4ac" stroke="#8a7a55" strokeWidth="1" vectorEffect="non-scaling-stroke" strokeLinejoin="round" />}
 
-          {bubbleItems.map((p) => {
+          {bubbleItems.map((p, i) => {
             const on = centerSlug === p.c.slug;
             const moved = Math.hypot(p.x - p.ox, p.y - p.oy) > 3 * u;
             return (
@@ -203,6 +203,12 @@ export default function HomeMap({ beans }) {
                   </>
                 )}
                 <circle cx={p.x} cy={p.y} r={p.r * 1.5} fill="transparent" />
+                {[0, 1].map((k) => (
+                  <circle key={k} cx={p.x} cy={p.y} r={p.r * 0.85} fill="none" stroke="#6b5a45" strokeWidth={0.8 * u} opacity="0">
+                    <animate attributeName="r" from={p.r * 0.85} to={p.r * 2.6} dur="3.2s" begin={`${(i % 4) * 0.4 + k * 1.6}s`} repeatCount="indefinite" />
+                    <animate attributeName="opacity" from="0.55" to="0" dur="3.2s" begin={`${(i % 4) * 0.4 + k * 1.6}s`} repeatCount="indefinite" />
+                  </circle>
+                ))}
                 {on && <circle cx={p.x} cy={p.y} r={p.r * 1.35} fill="none" stroke="#6b5a45" strokeWidth={0.9 * u} />}
                 <circle cx={p.x} cy={p.y} r={p.r * 0.85} fill="#6b5a45" opacity={on ? 0.9 : 0.72} stroke="rgba(250,249,246,.9)" strokeWidth={1.2 * u} />
                 <text

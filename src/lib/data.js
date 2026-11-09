@@ -31,9 +31,13 @@ export async function fetchBeanStory(beanId) {
     : { data: [] };
   const termsBySlug = Object.fromEntries((termsRes.data ?? []).map((t) => [t.slug, t]));
 
+  // 農園に緯度経度が未登録でも、産地マップ（首都→農園）を出せるよう仮座標で補う
+  const fb = FARM_GEO_FALLBACK[farmSlug];
+  const farm = farmRes.data && fb && farmRes.data.lat == null ? { ...farmRes.data, lat: fb.lat, lng: fb.lng } : farmRes.data;
+
   return {
     bean,
-    farm: farmRes.data,
+    farm,
     country: countryRes.data,
     process: processRes.data,
     varietyTerms: varietySlugs.map((s) => termsBySlug[s]).filter((t) => t?.body),
