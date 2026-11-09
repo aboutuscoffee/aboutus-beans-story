@@ -14,20 +14,38 @@ export function heroIsPhoto(bean) {
 }
 
 export function heroImageFor(bean) {
-  return CURATED_IMAGES[bean.id]?.hero ?? bean.image_urls?.[0] ?? null;
+  return CURATED_IMAGES[bean.id]?.hero ?? cardThumbFor(bean);
 }
 
 // 現行の全銘柄は image_urls[1] が同一テンプレートのシールカード（右下にレーダーチャート）。
 // ギャラリー先頭がそれになる（=キュレーション指定が無い）ときだけ、チャート部分を切り出して見せる。
 export function firstGalleryIsSealCard(bean) {
-  return !CURATED_IMAGES[bean.id] && (bean.image_urls?.length ?? 0) > 1;
+  return !CURATED_IMAGES[bean.id] && Boolean(cardImagesFor(bean)[1]);
 }
 
 // 「似た味わい」カード用: シールカード（=チャート入り）がある豆はその画像を返す
 export function chartImageFor(bean) {
-  return firstGalleryIsSealCard(bean) ? bean.image_urls[1] : null;
+  return firstGalleryIsSealCard(bean) ? cardImagesFor(bean)[1] : null;
 }
 
 export function galleryImagesFor(bean) {
   return CURATED_IMAGES[bean.id]?.gallery ?? bean.image_urls?.slice(1) ?? [];
+}
+
+// 内部管理アプリの「カード写真」2枚（#1=表、#2=レーダーチャート入りシールカード）。無ければ image_urls で代用
+export function cardImagesFor(bean) {
+  if (bean.card_image_url) {
+    try {
+      const arr = JSON.parse(bean.card_image_url);
+      if (Array.isArray(arr) && arr.some(Boolean)) return arr;
+    } catch {
+      return [bean.card_image_url];
+    }
+  }
+  return bean.image_urls ?? [];
+}
+
+// 豆カードのサムネイル。内部管理アプリの一覧と同じく、カード写真#1を使う
+export function cardThumbFor(bean) {
+  return cardImagesFor(bean)[0] || null;
 }

@@ -4,6 +4,7 @@ import { fetchWorldLand, geometryToPath } from '../lib/worldGeo';
 import { COUNTRY_GEO } from '../lib/countryGeo';
 import { extractFlavorTags, formatAltitude } from '../lib/text';
 import { useLang } from '../lib/lang';
+import { cardThumbFor } from '../lib/curatedImages';
 import StoreBadges from './StoreBadges';
 
 const SEA = '#e9e5db';
@@ -22,7 +23,7 @@ const MAPH = 262;
 const RATIO = MAPH / W0;
 const WORLD_VB = { x: 20, y: 56, w: 640 };
 
-const cardImage = (bean) => bean.image_urls?.[0] ?? null;
+const cardImage = cardThumbFor;
 
 function mainlandBBox(geometry) {
   const polys = geometry.type === 'Polygon' ? [geometry.coordinates] : geometry.coordinates;

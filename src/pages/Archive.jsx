@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { fetchArchivedBeans } from '../lib/data';
 import { LangToggle, useLang } from '../lib/lang';
 import { COUNTRY_GEO } from '../lib/countryGeo';
+import { cardThumbFor } from '../lib/curatedImages';
 import Ripple from '../components/Ripple';
 
 // 終売した豆の一覧。カード画像だけを並べて、物語のページへ入れる
@@ -35,9 +36,9 @@ export default function Archive() {
           <div className="grid grid-cols-2 gap-x-3 gap-y-6">
             {beans.map(({ bean, country }) => (
               <Link key={bean.id} to={`/beans/${bean.id}`} className="block">
-                {bean.image_urls?.[0] && (
+                {cardThumbFor(bean) && (
                   <img
-                    src={bean.image_urls[0]}
+                    src={cardThumbFor(bean)}
                     alt=""
                     loading="lazy"
                     className="block w-full rounded-[10px] object-cover"

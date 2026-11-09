@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { heroImageFor } from '../lib/curatedImages';
+import { cardThumbFor } from '../lib/curatedImages';
 
 // 画像未準備の豆でも破綻しないよう、豆IDから決定的にグラデーションを選ぶプレースホルダー
 const PLACEHOLDER_GRADIENTS = [
@@ -15,7 +15,7 @@ function placeholderFor(id) {
 }
 
 export default function BeanCard({ bean, country, index = 0 }) {
-  const image = heroImageFor(bean);
+  const image = cardThumbFor(bean);
 
   return (
     <Link
