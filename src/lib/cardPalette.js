@@ -2,7 +2,7 @@ import { sampleChartColor } from './chartColor';
 
 const cache = new Map();
 
-// 濃い色（紫など）が文字の背景で強くなりすぎないよう、色相は保ったまま明るさを持ち上げる
+// 色相と明るさは元のカードに忠実なまま、蛍光っぽさ（彩度）だけを抑える
 function softened(r, g, b) {
   r /= 255; g /= 255; b /= 255;
   const mx = Math.max(r, g, b), mn = Math.min(r, g, b), d = mx - mn;
@@ -10,7 +10,7 @@ function softened(r, g, b) {
   const s = d === 0 ? 0 : d / (1 - Math.abs(2 * l - 1));
   let h = d === 0 ? 0 : mx === r ? ((g - b) / d) % 6 : mx === g ? (b - r) / d + 2 : (r - g) / d + 4;
   h = (h * 60 + 360) % 360;
-  return `hsl(${Math.round(h)}, ${Math.round(Math.min(s, 1) * 70)}%, ${Math.round(Math.min(0.82, Math.max(0.66, l)) * 100)}%)`;
+  return `hsl(${Math.round(h)}, ${Math.round(Math.min(s, 1) * 58)}%, ${Math.round(Math.min(0.9, Math.max(0.35, l)) * 100)}%)`;
 }
 
 // シールカード下部の「色のスプラッシュ」から、色相ごとの代表色を取り出す（多い順）
@@ -58,7 +58,7 @@ function splashColors(url, max = 3) {
   return p;
 }
 
-const hsl = (c, dl = 0) => `hsl(${Math.round(c.h)}, ${Math.round(Math.min(c.s, 1) * 70)}%, ${Math.round(Math.min(0.82, Math.max(0.66, c.l + dl)) * 100)}%)`;
+const hsl = (c, dl = 0) => `hsl(${Math.round(c.h)}, ${Math.round(Math.min(c.s, 1) * 58)}%, ${Math.round(Math.min(0.9, Math.max(0.35, c.l + dl)) * 100)}%)`;
 
 // ヒーローの水彩に使う5色。カード下部のスプラッシュの色を主役に、レーダーチャートの色を添える。
 // 色が足りないときは同じ色を明るさ違いで補う。
