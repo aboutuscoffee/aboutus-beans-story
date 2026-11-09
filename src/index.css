@@ -101,3 +101,11 @@ select {
 @media (prefers-reduced-motion: reduce) {
   .ripple-ring { animation: none; opacity: 0.4; transform: scale(0.6); }
 }
+
+.auto-open-bar {
+  width: 0;
+  animation: auto-open linear forwards;
+}
+@keyframes auto-open {
+  to { width: 100%; }
+}

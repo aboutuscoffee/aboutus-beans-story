@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { fetchWorldLand, geometryToPath } from '../lib/worldGeo';
 import { COUNTRY_GEO } from '../lib/countryGeo';
 import { extractFlavorTags, formatAltitude } from '../lib/text';
@@ -9,6 +9,7 @@ import StoreBadges from './StoreBadges';
 const SEA = '#e9e5db';
 const LAND = '#d9cfbd';
 const LAND_LINE = '#bfb39c';
+const AUTO_OPEN_MS = 5000;
 const LINES = [[0, 0.9, '赤道'], [23.44, 0.5], [-23.44, 0.5]];
 
 // 等長方形図法（経度・緯度をそのままviewBox座標へ）
@@ -72,6 +73,14 @@ function spreadBubbles(groups, u) {
 
 export default function HomeMap({ beans }) {
   const { lang, tr } = useLang();
+  const navigate = useNavigate();
+  const [autoId, setAutoId] = useState(null);
+  const autoTimer = useRef(0);
+
+  function cancelAuto() {
+    clearTimeout(autoTimer.current);
+    setAutoId(null);
+  }
   const groups = useMemo(() => groupByCountry(beans), [beans]);
   const bySlug = useMemo(() => Object.fromEntries(groups.map((c) => [c.slug, c])), [groups]);
   const ordered = useMemo(() => groups.flatMap((c) => c.list), [groups]);
@@ -101,7 +110,7 @@ export default function HomeMap({ beans }) {
       .catch(() => setWorld({ all: [], countries: {} }));
   }, []);
 
-  useEffect(() => () => cancelAnimationFrame(animRef.current), []);
+  useEffect(() => () => { cancelAnimationFrame(animRef.current); clearTimeout(autoTimer.current); }, []);
 
   function tweenTo(to, ms = 700) {
     cancelAnimationFrame(animRef.current);
@@ -120,6 +129,11 @@ export default function HomeMap({ beans }) {
   }
 
   function enterCountry(slug, id = null) {
+    cancelAuto();
+    if (id) {
+      setAutoId(id);
+      autoTimer.current = setTimeout(() => navigate(`/beans/${id}`), AUTO_OPEN_MS);
+    }
     const c = bySlug[slug];
     const cp = world?.countries[slug];
     const b = cp ? cp.bbox : [c.x - 10, c.y - 10, c.x + 10, c.y + 10];
@@ -132,6 +146,7 @@ export default function HomeMap({ beans }) {
   }
 
   function enterWorld() {
+    cancelAuto();
     setMode('world');
     setCurSlug(null);
     setSelId(null);
@@ -139,6 +154,7 @@ export default function HomeMap({ beans }) {
   }
 
   function selectBean(id, scrollToRow) {
+    cancelAuto();
     setSelId(id);
     if (scrollToRow) rowRefs.current[id]?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
@@ -273,6 +289,12 @@ export default function HomeMap({ beans }) {
             );
           })}
         </svg>
+
+        {autoId && (
+          <div className="absolute left-0 right-0 bottom-0" style={{ height: 2, background: 'rgba(107,90,69,.15)' }}>
+            <div className="auto-open-bar" style={{ height: '100%', background: '#6b5a45', animationDuration: `${AUTO_OPEN_MS}ms` }} />
+          </div>
+        )}
 
         {mode === 'country' && cur && (
           <>
