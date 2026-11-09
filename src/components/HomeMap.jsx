@@ -4,6 +4,7 @@ import { fetchWorldLand, geometryToPath } from '../lib/worldGeo';
 import { COUNTRY_GEO } from '../lib/countryGeo';
 import { extractFlavorTags, formatAltitude } from '../lib/text';
 import { useLang } from '../lib/lang';
+import { playRippleTransition } from '../lib/rippleTransition';
 import { cardThumbFor } from '../lib/curatedImages';
 import StoreBadges from './StoreBadges';
 
@@ -77,6 +78,7 @@ export default function HomeMap({ beans }) {
   const navigate = useNavigate();
   const [autoId, setAutoId] = useState(null);
   const autoTimer = useRef(0);
+  const mapBoxRef = useRef(null);
 
   function cancelAuto() {
     clearTimeout(autoTimer.current);
@@ -133,7 +135,14 @@ export default function HomeMap({ beans }) {
     cancelAuto();
     if (id) {
       setAutoId(id);
-      autoTimer.current = setTimeout(() => navigate(`/beans/${id}`), AUTO_OPEN_MS);
+      autoTimer.current = setTimeout(() => {
+        setAutoId(null);
+        const el = document.querySelector(`[data-pin-id="${id}"]`);
+        const r = (el ?? mapBoxRef.current)?.getBoundingClientRect();
+        const x = r ? r.left + r.width / 2 : window.innerWidth / 2;
+        const y = r ? r.top + r.height / 2 : window.innerHeight / 3;
+        playRippleTransition(x, y, () => navigate(`/beans/${id}`));
+      }, AUTO_OPEN_MS);
     }
     const c = bySlug[slug];
     const cp = world?.countries[slug];
@@ -189,7 +198,7 @@ export default function HomeMap({ beans }) {
 
   return (
     <div>
-      <div className="relative overflow-hidden" style={{ aspectRatio: `${W0} / ${MAPH}`, background: SEA }}>
+      <div ref={mapBoxRef} className="relative overflow-hidden" style={{ aspectRatio: `${W0} / ${MAPH}`, background: SEA }}>
         <svg
           viewBox={`${vb.x} ${vb.y} ${vb.w} ${vb.w * RATIO}`}
           preserveAspectRatio="xMidYMid slice"
@@ -267,6 +276,7 @@ export default function HomeMap({ beans }) {
             return (
               <g
                 key={b.bean.id}
+                data-pin-id={b.bean.id}
                 style={{ cursor: 'pointer', opacity: on || !selId ? 1 : 0.55 }}
                 onClick={() => selectBean(b.bean.id, true)}
               >
