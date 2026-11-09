@@ -10,7 +10,7 @@ import StoreBadges from './StoreBadges';
 const SEA = '#e9e5db';
 const LAND = '#d9cfbd';
 const LAND_LINE = '#bfb39c';
-const AUTO_OPEN_MS = 5000;
+const AUTO_OPEN_MS = 2000;
 const LINES = [[0, 0.9, '赤道'], [23.44, 0.5], [-23.44, 0.5]];
 
 // 等長方形図法（経度・緯度をそのままviewBox座標へ）
