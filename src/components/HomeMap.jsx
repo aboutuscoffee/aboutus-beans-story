@@ -79,7 +79,7 @@ const RIPPLE_T = 4.8;
 const RIPPLE_N = 3;
 function BubbleRipples({ x, y, r, u }) {
   if (prefersReducedMotion()) return null;
-  const d = r * 1.36;
+  const d = r * 0.68;
   const sources = [
     [x, y - d],
     [x - d * 0.87, y + d * 0.5],
@@ -93,7 +93,7 @@ function BubbleRipples({ x, y, r, u }) {
           const begin = `${(k * spacing + (i * spacing) / 3).toFixed(2)}s`;
           return (
             <circle key={`${i}-${k}`} cx={cx} cy={cy} r="0" fill="none" stroke="#6b5a45" strokeWidth={0.9 * u} opacity="0">
-              <animate attributeName="r" from="0" to={r * 3.2} dur={`${RIPPLE_T}s`} begin={begin} repeatCount="indefinite" />
+              <animate attributeName="r" from="0" to={r * 1.6} dur={`${RIPPLE_T}s`} begin={begin} repeatCount="indefinite" />
               <animate attributeName="opacity" values="0;0.6;0" keyTimes="0;0.1;1" dur={`${RIPPLE_T}s`} begin={begin} repeatCount="indefinite" />
             </circle>
           );
@@ -260,8 +260,8 @@ export default function HomeMap({ beans }) {
                 )}
                 <circle cx={p.x} cy={p.y} r={p.r * 1.5} fill="transparent" />
                 {on && <BubbleRipples key={p.c.slug} x={p.x} y={p.y} r={p.r} u={u} />}
-                {on && <circle cx={p.x} cy={p.y} r={p.r * 1.35} fill="none" stroke="#6b5a45" strokeWidth={0.9 * u} />}
-                <circle cx={p.x} cy={p.y} r={p.r * 0.85} fill="#6b5a45" opacity={on ? 0.9 : 0.72} stroke="rgba(250,249,246,.9)" strokeWidth={1.2 * u} />
+                {on && <circle cx={p.x} cy={p.y} r={p.r * 1.12} fill="none" stroke="#6b5a45" strokeWidth={0.9 * u} />}
+                <circle cx={p.x} cy={p.y} r={p.r * (on ? 0.76 : 0.85)} fill="#6b5a45" opacity={on ? 0.9 : 0.72} stroke="rgba(250,249,246,.9)" strokeWidth={1.2 * u} />
                 <text
                   x={p.x}
                   y={p.y + 3.3 * u}
