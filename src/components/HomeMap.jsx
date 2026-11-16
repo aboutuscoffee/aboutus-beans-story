@@ -7,7 +7,7 @@ import { useLang } from '../lib/lang';
 import { playRippleTransition } from '../lib/rippleTransition';
 import { cardThumbFor } from '../lib/curatedImages';
 import StoreBadges from './StoreBadges';
-import { dropRipple, prefersReducedMotion } from '../lib/dropRipple';
+import { prefersReducedMotion } from '../lib/dropRipple';
 
 const SEA = '#e9e5db';
 const LAND = '#d9cfbd';
@@ -74,25 +74,33 @@ function spreadBubbles(groups, u) {
   return items;
 }
 
-// 丸ごとにバラバラのタイミングで、細い輪が1本ずつ広がる（水面に雫が落ちるイメージ）
+// ピックアップ中の国の丸だけ、ロゴの3方向（上・左下・右下）から細い輪が一定間隔で広がる。読み込み中の波紋と同じ動き
+const RIPPLE_T = 4.8;
+const RIPPLE_N = 3;
 function BubbleRipples({ x, y, r, u }) {
-  const ref = useRef(null);
-  const latest = useRef({ x, y, r, u });
-  latest.current = { x, y, r, u };
-  useEffect(() => {
-    const g = ref.current;
-    if (!g || prefersReducedMotion()) return undefined;
-    let timer;
-    const cancels = new Set();
-    const loop = () => {
-      const c = latest.current;
-      cancels.add(dropRipple(g, { x: c.x, y: c.y, r0: c.r * 0.85, r1: c.r * 2.6, sw: 0.8 * c.u, rings: 1, dur: 3.2, peak: 0.55 }));
-      timer = setTimeout(loop, 1500 + Math.random() * 3200);
-    };
-    timer = setTimeout(loop, Math.random() * 2500);
-    return () => { clearTimeout(timer); cancels.forEach((f) => f()); };
-  }, []);
-  return <g ref={ref} pointerEvents="none" />;
+  if (prefersReducedMotion()) return null;
+  const d = r * 1.36;
+  const sources = [
+    [x, y - d],
+    [x - d * 0.87, y + d * 0.5],
+    [x + d * 0.87, y + d * 0.5],
+  ];
+  const spacing = RIPPLE_T / RIPPLE_N;
+  return (
+    <g pointerEvents="none">
+      {sources.flatMap(([cx, cy], i) =>
+        Array.from({ length: RIPPLE_N }, (_, k) => {
+          const begin = `${(k * spacing + (i * spacing) / 3).toFixed(2)}s`;
+          return (
+            <circle key={`${i}-${k}`} cx={cx} cy={cy} r="0" fill="none" stroke="#6b5a45" strokeWidth={0.9 * u} opacity="0">
+              <animate attributeName="r" from="0" to={r * 3.2} dur={`${RIPPLE_T}s`} begin={begin} repeatCount="indefinite" />
+              <animate attributeName="opacity" values="0;0.6;0" keyTimes="0;0.1;1" dur={`${RIPPLE_T}s`} begin={begin} repeatCount="indefinite" />
+            </circle>
+          );
+        })
+      )}
+    </g>
+  );
 }
 
 export default function HomeMap({ beans }) {
@@ -251,7 +259,7 @@ export default function HomeMap({ beans }) {
                   </>
                 )}
                 <circle cx={p.x} cy={p.y} r={p.r * 1.5} fill="transparent" />
-                <BubbleRipples x={p.x} y={p.y} r={p.r} u={u} />
+                {on && <BubbleRipples key={p.c.slug} x={p.x} y={p.y} r={p.r} u={u} />}
                 {on && <circle cx={p.x} cy={p.y} r={p.r * 1.35} fill="none" stroke="#6b5a45" strokeWidth={0.9 * u} />}
                 <circle cx={p.x} cy={p.y} r={p.r * 0.85} fill="#6b5a45" opacity={on ? 0.9 : 0.72} stroke="rgba(250,249,246,.9)" strokeWidth={1.2 * u} />
                 <text
