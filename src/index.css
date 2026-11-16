@@ -90,18 +90,6 @@ select {
   text-wrap: pretty;
 }
 
-.ripple-ring {
-  animation: ripple-ring 2.7s ease-out infinite;
-  opacity: 0;
-}
-@keyframes ripple-ring {
-  0% { transform: scale(0.1); opacity: 0.9; }
-  100% { transform: scale(1); opacity: 0; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .ripple-ring { animation: none; opacity: 0.4; transform: scale(0.6); }
-}
-
 .auto-open-bar {
   width: 0;
   animation: auto-open linear forwards;

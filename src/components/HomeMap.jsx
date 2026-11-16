@@ -7,6 +7,7 @@ import { useLang } from '../lib/lang';
 import { playRippleTransition } from '../lib/rippleTransition';
 import { cardThumbFor } from '../lib/curatedImages';
 import StoreBadges from './StoreBadges';
+import { dropRipple, prefersReducedMotion } from '../lib/dropRipple';
 
 const SEA = '#e9e5db';
 const LAND = '#d9cfbd';
@@ -71,6 +72,27 @@ function spreadBubbles(groups, u) {
     }
   }
   return items;
+}
+
+// 丸ごとにバラバラのタイミングで、細い輪が1本ずつ広がる（水面に雫が落ちるイメージ）
+function BubbleRipples({ x, y, r, u }) {
+  const ref = useRef(null);
+  const latest = useRef({ x, y, r, u });
+  latest.current = { x, y, r, u };
+  useEffect(() => {
+    const g = ref.current;
+    if (!g || prefersReducedMotion()) return undefined;
+    let timer;
+    const cancels = new Set();
+    const loop = () => {
+      const c = latest.current;
+      cancels.add(dropRipple(g, { x: c.x, y: c.y, r0: c.r * 0.85, r1: c.r * 2.6, sw: 0.8 * c.u, rings: 1, dur: 3.2, peak: 0.55 }));
+      timer = setTimeout(loop, 1500 + Math.random() * 3200);
+    };
+    timer = setTimeout(loop, Math.random() * 2500);
+    return () => { clearTimeout(timer); cancels.forEach((f) => f()); };
+  }, []);
+  return <g ref={ref} pointerEvents="none" />;
 }
 
 export default function HomeMap({ beans }) {
@@ -229,12 +251,7 @@ export default function HomeMap({ beans }) {
                   </>
                 )}
                 <circle cx={p.x} cy={p.y} r={p.r * 1.5} fill="transparent" />
-                {[0, 1].map((k) => (
-                  <circle key={k} cx={p.x} cy={p.y} r={p.r * 0.85} fill="none" stroke="#6b5a45" strokeWidth={0.8 * u} opacity="0">
-                    <animate attributeName="r" from={p.r * 0.85} to={p.r * 2.6} dur="3.2s" begin={`${(i % 4) * 0.4 + k * 1.6}s`} repeatCount="indefinite" />
-                    <animate attributeName="opacity" from="0.55" to="0" dur="3.2s" begin={`${(i % 4) * 0.4 + k * 1.6}s`} repeatCount="indefinite" />
-                  </circle>
-                ))}
+                <BubbleRipples x={p.x} y={p.y} r={p.r} u={u} />
                 {on && <circle cx={p.x} cy={p.y} r={p.r * 1.35} fill="none" stroke="#6b5a45" strokeWidth={0.9 * u} />}
                 <circle cx={p.x} cy={p.y} r={p.r * 0.85} fill="#6b5a45" opacity={on ? 0.9 : 0.72} stroke="rgba(250,249,246,.9)" strokeWidth={1.2 * u} />
                 <text
