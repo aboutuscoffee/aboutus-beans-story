@@ -75,7 +75,7 @@ function spreadBubbles(groups, u) {
 }
 
 // ピックアップ中の国の丸だけ、ロゴの3方向（上・左下・右下）から細い輪が一定間隔で広がる。読み込み中の波紋と同じ動き
-const RIPPLE_T = 4.8;
+const RIPPLE_T = 7.2;
 const RIPPLE_N = 3;
 function BubbleRipples({ x, y, r, u }) {
   if (prefersReducedMotion()) return null;
