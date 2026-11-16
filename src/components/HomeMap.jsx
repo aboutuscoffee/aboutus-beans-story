@@ -260,7 +260,6 @@ export default function HomeMap({ beans }) {
                 )}
                 <circle cx={p.x} cy={p.y} r={p.r * 1.5} fill="transparent" />
                 {on && <BubbleRipples key={p.c.slug} x={p.x} y={p.y} r={p.r} u={u} />}
-                {on && <circle cx={p.x} cy={p.y} r={p.r * 1.12} fill="none" stroke="#6b5a45" strokeWidth={0.9 * u} />}
                 <circle cx={p.x} cy={p.y} r={p.r * (on ? 0.76 : 0.85)} fill="#6b5a45" opacity={on ? 0.9 : 0.72} stroke="rgba(250,249,246,.9)" strokeWidth={1.2 * u} />
                 <text
                   x={p.x}
